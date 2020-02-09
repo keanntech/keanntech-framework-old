@@ -1,0 +1,8 @@
+server:
+  port: 9100
+spring:
+  cloud:
+    config:
+      name: keanntech-authorization
+      profile: dev
+      uri: http://127.0.0.1:9200

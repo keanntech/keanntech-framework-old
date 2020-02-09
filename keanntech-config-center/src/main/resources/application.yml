@@ -1,0 +1,13 @@
+server:
+  port: 9200
+
+spring:
+  application:
+    name: config-center
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config

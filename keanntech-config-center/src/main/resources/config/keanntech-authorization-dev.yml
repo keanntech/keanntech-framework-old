@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: keanntech-authorization
+
+encrypt:
+  key-store:
+    location: classpath:/keanntech.jks
+    secret: eddy456qwer
+    alias: keanntech
+    password: eddy456qwer
+    type: jks
+
+ignore:
+  webUnInterceptUris: /v2/api-docs,/swagger-ui.html,/swagger-resources/**,/webjars/**,/oauth/**,/actuator/**,/druid/*
+
+keanntech:
+  front:
+    loginUrl: http://127.0.0.1:9528/#/login?redirect=%2Fdashboard

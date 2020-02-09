@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.keanntech.provider.mapper.SysUserMapper">
+    <resultMap id="SysUserResultMap" type="com.keanntech.common.model.po.SysUser">
+        <id column="id" property="id"></id>
+        <result column="create_id" property="createId"></result>
+        <result column="update_id" property="updateId"></result>
+        <result column="create_date" property="createDate"></result>
+        <result column="update_date" property="updateDate"></result>
+        <result column="remark" property="remark"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="password" property="password"></result>
+        <result column="job_number" property="jobNumber"></result>
+        <result column="name" property="name"></result>
+        <result column="email" property="email"></result>
+        <result column="phone" property="phone"></result>
+        <result column="mobile" property="mobile"></result>
+        <result column="photo" property="photo"></result>
+        <result column="enabled" property="enabled"></result>
+        <result column="sys_company_id" property="sysCompanyId"></result>
+        <result column="account_non_expired" property="accountNonExpired"></result>
+        <result column="credentials_non_expired" property="credentialsNonExpired"></result>
+        <result column="account_non_locked" property="accountNonLocked"></result>
+    </resultMap>
+
+    <select id="loadUser" resultMap="SysUserResultMap">
+        SELECT * from sys_user WHERE user_name = #{userName}
+    </select>
+</mapper>
