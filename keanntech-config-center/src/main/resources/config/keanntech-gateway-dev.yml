@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: keanntech-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: gateway-route-authorization
+          uri: http://127.0.0.1:9100
+          predicates:
+            - Path=/oauth/**
+        - id: gateway-route-provider
+          uri: http://127.0.0.1:9300
+          predicates:
+            - Path=/api/**
+
+
+ignore:
+  authUrls:
+    - /oauth/
+
+keanntech:
+  feignurl:
+    provider: 127.0.0.1:9300
+    auth: 127.0.0.1:9100

@@ -21,12 +21,12 @@ public class SysUserController {
     @Autowired
     ISysUserService sysUserService;
 
-    @GetMapping(value = "/loadUser/{userName}",produces = MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET, consumes = MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET)
+    @PostMapping(value = "/loadUser", produces = MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET, consumes = MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET)
     @ApiOperation(value = "根据用户名获取用户信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "userName", value = "用户名", required = true, dataType = "string")
+            @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "string")
     })
-    public ResponseData<SysUser> loadUser(@PathVariable("userName") String userName){
+    public ResponseData<SysUser> loadUser(@RequestParam("userName") String userName){
         SysUser sysUser = sysUserService.loadUser(userName);
         if(Objects.isNull(sysUser)){
             return ResponseDataUtil.buildSuccess(ResultEnums.USER_NOT_EXIST.getCode(), "用户" + userName + "不存在！");

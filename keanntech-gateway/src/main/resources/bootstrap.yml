@@ -1,0 +1,9 @@
+server:
+  port: 9000
+
+spring:
+  cloud:
+    config:
+      name: keanntech-gateway
+      profile: dev
+      uri: http://127.0.0.1:9200

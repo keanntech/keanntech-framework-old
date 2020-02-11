@@ -42,6 +42,17 @@ mybatis-plus:
       logic-not-delete-value: 1
       logic-delete-value: 0
 
+ignore:
+  authUrls:
+    - /oauth/**
+    - /actuator/**
+    - /druid/**
+    - /v2/api-docs
+    - /swagger-ui.html
+    - /swagger-resources/**
+    - /api/**
+  webUnInterceptUris: /v2/api-docs,/swagger-ui.html,/swagger-resources/**,/webjars/**,/oauth/**,/actuator/**,/druid/*
+
 keanntech:
   feignurl:
     provider: 127.0.0.1:9300

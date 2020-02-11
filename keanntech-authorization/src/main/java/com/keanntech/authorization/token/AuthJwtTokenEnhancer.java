@@ -18,7 +18,7 @@ public class AuthJwtTokenEnhancer implements TokenEnhancer {
         SysUser user = (SysUser) oAuth2Authentication.getUserAuthentication().getPrincipal();
         additionalInfo.put("id", user.getId());
         additionalInfo.put("name", user.getName());
-        additionalInfo.put("username", user.getUserName());
+        additionalInfo.put("userName", user.getUserName());
         additionalInfo.put("jobNumber", user.getJobNumber());
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(additionalInfo);
         return oAuth2AccessToken;
