@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>keanntech-provider</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>keanntech-provider-admin</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -88,6 +92,11 @@
             <groupId>com.keanntech.framework</groupId>
             <artifactId>keanntech-common-model</artifactId>
             <version>${keanntech-common-model.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.keanntech.framework</groupId>
+            <artifactId>keanntech-provider-api</artifactId>
+            <version>${keanntech-provider-api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>

@@ -1,8 +1,0 @@
-server:
-  port: 9300
-spring:
-  cloud:
-    config:
-      name: keanntech-provider
-      profile: dev
-      uri: http://127.0.0.1:9200

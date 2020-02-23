@@ -1,6 +1,23 @@
+server:
+  port: 9001
+
 spring:
   application:
     name: keanntech-authorization
+
+  redis:
+    host: 192.168.12.129
+    port: 6379
+    timeout: 10000
+    database: 0
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 100
+        max-wait: -1
+        min-idle: 20
+      shutdown-timeout: 10000
 
 encrypt:
   key-store:
@@ -11,8 +28,19 @@ encrypt:
     type: jks
 
 ignore:
-  webUnInterceptUris: /v2/api-docs,/swagger-ui.html,/swagger-resources/**,/webjars/**,/oauth/**,/actuator/**,/druid/*
+  authUrls:
+    - /oauth/*
+    - /actuator/*
+    - /druid/*
+    - /v2/api-docs
+    - /swagger-ui.html
+    - /swagger-resources/*
+    - /api/*
+  webUnInterceptUris: /oauth/authorize,/v2/api-docs,/swagger-ui.html,/swagger-resources/**,/webjars/**,/oauth/**,/actuator/**,/druid/**
 
 keanntech:
   front:
     loginUrl: http://127.0.0.1:9528/#/login?redirect=%2Fdashboard
+  feignUrl:
+    provider:
+      admin: http://127.0.0.1:9003

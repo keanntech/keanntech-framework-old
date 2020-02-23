@@ -21,11 +21,11 @@ public class ResponseDataUtil {
         return new ResponseData(ResultEnums.SUCCESS.getCode(), msg);
     }
 
-    public static ResponseData buildSuccess(String code, String msg) {
+    public static ResponseData buildSuccess(Integer code, String msg) {
         return new ResponseData(code, msg);
     }
 
-    public static <T> ResponseData buildSuccess(String code, String msg, T data) {
+    public static <T> ResponseData buildSuccess(Integer code, String msg, T data) {
         return new ResponseData<T>(code, msg, data);
     }
 
@@ -45,11 +45,11 @@ public class ResponseDataUtil {
         return new ResponseData(ResultEnums.ERROR.getCode(), msg);
     }
 
-    public static ResponseData buildError(String code, String msg) {
+    public static ResponseData buildError(Integer code, String msg) {
         return new ResponseData(code, msg);
     }
 
-    public static <T> ResponseData buildError(String code, String msg, T data) {
+    public static <T> ResponseData buildError(Integer code, String msg, T data) {
         return new ResponseData<T>(code, msg, data);
     }
 

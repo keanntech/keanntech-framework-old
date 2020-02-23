@@ -1,14 +1,12 @@
 package com.keanntech.gateway.filter;
 
-import com.keanntech.common.base.constants.SecurityConstants;
-import com.keanntech.common.base.properties.FilterIgnoreProperties;
+import com.keanntech.gateway.properties.FilterIgnoreProperties;
 import com.keanntech.provider.api.auth.OauthApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -23,7 +21,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Configuration
-@ComponentScan(basePackages = {"com.keanntech.common.base"})
 @Slf4j
 public class AccessGatewayFilter implements GlobalFilter, Ordered {
 
@@ -46,6 +43,7 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
 
         //获取TOKEN、USERNAME、METHOD进行验证
         String authentication = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        String userName = String.valueOf(request.getHeaders().get("UserName"));
         String method = request.getMethodValue();
 
         //如果TOKEN、USERNAME为空返回401
@@ -54,9 +52,9 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
         }
 
         //验证TOKEN是否合法；验证是否有URL、METHOD权限
-        if(oauthApi.hasPermission(authentication, url, method)){
+        if(oauthApi.hasPermission(authentication, userName, url, method)){
             ServerHttpRequest.Builder builder = request.mutate();
-            builder.header(SecurityConstants.AUTH_HEADER,authentication);
+            builder.header("Authorization",authentication);
             return chain.filter(exchange.mutate().request(builder.build()).build());
         }
 

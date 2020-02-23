@@ -1,3 +1,5 @@
+server:
+  port: 9000
 spring:
   application:
     name: keanntech-gateway
@@ -7,14 +9,14 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: gateway-route-authorization
-          uri: http://127.0.0.1:9100
-          predicates:
-            - Path=/oauth/**
-        - id: gateway-route-provider
-          uri: http://127.0.0.1:9300
-          predicates:
-            - Path=/api/**
+      - id: gateway-route-authorization
+        uri: ${keanntech.feignUrl.provider.auth}
+        predicates:
+         - Path=/oauth/**
+      - id: gateway-route-provider-admin
+        uri: ${keanntech.feignUrl.provider.admin}
+        predicates:
+         - Path=/api/admin/**
 
 
 ignore:
@@ -22,6 +24,7 @@ ignore:
     - /oauth/
 
 keanntech:
-  feignurl:
-    provider: 127.0.0.1:9300
-    auth: 127.0.0.1:9100
+  feignUrl:
+    provider:
+      admin: http://127.0.0.1:9003
+      auth: http://127.0.0.1:9001

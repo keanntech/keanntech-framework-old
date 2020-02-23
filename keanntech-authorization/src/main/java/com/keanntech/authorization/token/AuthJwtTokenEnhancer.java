@@ -14,12 +14,13 @@ public class AuthJwtTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
 
-        final Map<String, Object> additionalInfo = new HashMap<>(4);
+        final Map<String, Object> additionalInfo = new HashMap<>(5);
         SysUser user = (SysUser) oAuth2Authentication.getUserAuthentication().getPrincipal();
         additionalInfo.put("id", user.getId());
         additionalInfo.put("name", user.getName());
         additionalInfo.put("userName", user.getUserName());
         additionalInfo.put("jobNumber", user.getJobNumber());
+        additionalInfo.put("photo", user.getPhoto());
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(additionalInfo);
         return oAuth2AccessToken;
 

@@ -6,7 +6,7 @@ public class ResponseData<T> implements Serializable {
 
     private static final long serialVersionUID = -7663150516951064248L;
 
-    private String code;
+    private Integer code;
 
     private String msg;
 
@@ -21,13 +21,13 @@ public class ResponseData<T> implements Serializable {
                 '}';
     }
 
-    public ResponseData(String code, String msg, T data) {
+    public ResponseData(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public ResponseData(String code, String msg) {
+    public ResponseData(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
@@ -46,11 +46,11 @@ public class ResponseData<T> implements Serializable {
     public ResponseData() {
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

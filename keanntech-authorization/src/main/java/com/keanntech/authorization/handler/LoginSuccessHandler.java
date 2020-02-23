@@ -1,19 +1,25 @@
 package com.keanntech.authorization.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.keanntech.authorization.service.IClientDetailsService;
 import com.keanntech.authorization.token.AuthJwtTokenEnhancer;
 import com.keanntech.common.base.constants.GlobalsConstants;
 import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.base.reponse.ResponseDataUtil;
 import com.keanntech.common.base.reponse.ResultEnums;
+import com.keanntech.common.base.utils.RedisUtil;
 import com.keanntech.common.model.po.SysUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessTokenJackson2Serializer;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
@@ -30,6 +36,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -44,6 +51,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     JwtAccessTokenConverter jwtAccessTokenConverter;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
@@ -62,6 +72,14 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             OAuth2Authentication oAuth2Authentication = new OAuth2Authentication(oAuth2Request,authentication);
             OAuth2AccessToken token = defaultTokenServices().createAccessToken(oAuth2Authentication);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonGenerator jg = mapper.getJsonFactory().createJsonGenerator(new PrintWriter(bos));
+            OAuth2AccessTokenJackson2Serializer oAuth2AccessTokenJackson2Serializer = new OAuth2AccessTokenJackson2Serializer();
+            oAuth2AccessTokenJackson2Serializer.serialize(token, jg, null);
+            redisUtil.set(GlobalsConstants.CACHE_NAME_TOKEN_SERIALIZER + "::" + clientDetails.getClientId(), bos.toString());
+
             resData = ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"登录成功！",JSON.toJSONString(token));
         }
 

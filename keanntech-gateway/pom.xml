@@ -23,23 +23,16 @@
         </dependency>
         <dependency>
             <groupId>com.keanntech.framework</groupId>
-            <artifactId>keanntech-common-base</artifactId>
-            <version>${keanntech-common-base.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.keanntech.framework</groupId>
             <artifactId>keanntech-provider-api</artifactId>
             <version>${keanntech-provider-api.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>spring-boot-starter-web</artifactId>
                     <groupId>org.springframework.boot</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>keanntech-common-base</artifactId>
+                    <groupId>com.keanntech.framework</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

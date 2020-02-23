@@ -2,7 +2,6 @@ package com.keanntech.common.base.properties;
 
 import com.keanntech.common.base.constants.GlobalsConstants;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Data
 @Configuration
-@ConditionalOnExpression("!'${ignore}'.isEmpty()")
 @ConfigurationProperties(prefix = GlobalsConstants.FILTER_IGNORE)
 public class FilterIgnoreProperties {
 

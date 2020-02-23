@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      name: keanntech-provider-admin
+      profile: dev
+      uri: http://127.0.0.1:9002

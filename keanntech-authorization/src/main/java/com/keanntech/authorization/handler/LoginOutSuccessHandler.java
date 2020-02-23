@@ -1,13 +1,12 @@
 package com.keanntech.authorization.handler;
 
-import cn.hutool.core.util.StrUtil;
-import com.keanntech.common.base.constants.SecurityConstants;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keanntech.common.base.constants.GlobalsConstants;
+import com.keanntech.common.base.reponse.ResponseData;
+import com.keanntech.common.base.reponse.ResponseDataUtil;
+import com.keanntech.common.base.reponse.ResultEnums;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2RefreshToken;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Component
 public class LoginOutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
@@ -25,6 +25,13 @@ public class LoginOutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+        httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET);
+        ResponseData resData = ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"成功退出！", null);
+        ObjectMapper om = new ObjectMapper();
+        PrintWriter out = httpServletResponse.getWriter();
+        out.write(om.writeValueAsString(resData));
+        out.flush();
+        out.close();
 //        String token = httpServletRequest.getHeader(SecurityConstants.AUTH_HEADER);
 //        String tokenValue = token.replace(SecurityConstants.BEARER_TYPE, StrUtil.EMPTY).trim();
 //        OAuth2AccessToken accessToken = redisTokenStore.readAccessToken(tokenValue);

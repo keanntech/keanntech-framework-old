@@ -1,6 +1,7 @@
 package com.keanntech.common.model.po;
 
 
+import com.keanntech.common.model.BasePO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,15 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class SysUser {
+public class SysUser extends BasePO {
 
-  private long id;
-  private long createId;
-  private long updateId;
+  private Long createId;
+  private Long updateId;
   private java.sql.Timestamp createDate;
   private java.sql.Timestamp updateDate;
   private String remark;
-  private boolean deleted;
+  private Boolean deleted;
   private String userName;
   private String password;
   private String jobNumber;
@@ -30,7 +30,7 @@ public class SysUser {
   private String mobile;
   private String photo;
   private Boolean enabled;
-  private long sysCompanyId;
+  private Long sysCompanyId;
   private Boolean accountNonExpired;
   private Boolean credentialsNonExpired;
   private Boolean accountNonLocked;

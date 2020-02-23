@@ -21,7 +21,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
 
-
         httpServletResponse.setContentType("application/json;charset=utf-8");
         ResponseData resData = null;
         if (e instanceof BadCredentialsException ||

@@ -9,10 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication(
-        scanBasePackages = {
-                "com.keanntech.common.base",
-                "com.keanntech.authorization"}
-                )
+        scanBasePackages = {"com.keanntech.common.base","com.keanntech.authorization"})
 @EnableAuthJWTTokenStore
 @EnableFeignClients(basePackages = {"com.keanntech.provider.api"})
 @Import({HttpMessageConvertersConfig.class, RestTemplateConfig.class})

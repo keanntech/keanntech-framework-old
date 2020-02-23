@@ -1,0 +1,13 @@
+#spring:
+#  cloud:
+#    consul:
+#      host: 192.168.12.128
+#      port: 8500
+#      discovery:
+#        prefer-ip-address: true
+#        enabled: true
+#        register: true
+#        service-name: ${spring.application.name}
+#        health-check-path: /actuator/health
+#        health-check-interval: 15s
+#        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
