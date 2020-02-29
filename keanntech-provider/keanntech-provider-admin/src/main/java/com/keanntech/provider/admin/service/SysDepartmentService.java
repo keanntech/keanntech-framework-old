@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 系统组织架构表sys_department 如，xx公司--xx部门(SysDepartment)表服务接口
  *
- * @author miaoqingfu
+ * @author eddey.miao
  * @since 2020-02-13 20:29:31
  */
 public interface SysDepartmentService {

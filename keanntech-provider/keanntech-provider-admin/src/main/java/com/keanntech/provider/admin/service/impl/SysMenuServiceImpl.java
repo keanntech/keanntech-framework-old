@@ -3,9 +3,9 @@ package com.keanntech.provider.admin.service.impl;
 import com.keanntech.common.model.po.SysMenu;
 import com.keanntech.provider.admin.mapper.SysMenuMapper;
 import com.keanntech.provider.admin.service.ISysMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,8 +16,14 @@ import java.util.List;
  */
 @Service("sysMenuService")
 public class SysMenuServiceImpl implements ISysMenuService {
-    @Resource
+
+    @Autowired
     private SysMenuMapper sysMenuMapper;
+
+    @Override
+    public List<SysMenu> loadSysMenus(List<Long> roleIds){
+        return sysMenuMapper.loadSysMenus(roleIds);
+    }
 
     /**
      * 通过ID查询单条数据

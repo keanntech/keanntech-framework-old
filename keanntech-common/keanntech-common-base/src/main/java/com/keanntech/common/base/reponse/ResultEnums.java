@@ -9,7 +9,9 @@ public enum ResultEnums implements ErrorType {
 
     USER_NOT_EXIST(2000,"用户不存在！"),
 
-    RESOURCE_DATA_EMPTY(3000,"资源数据为空！");
+    MENU_EMPTY(3000,"未设置菜单！"),
+
+    ROLE_EMPTY(4000, "权限为空！");
 
     private Integer code;
     private String msg;

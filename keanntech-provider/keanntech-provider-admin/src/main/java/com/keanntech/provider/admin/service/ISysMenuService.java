@@ -7,10 +7,12 @@ import java.util.List;
 /**
  * 系统菜单sys_menu, 资源树，按钮(SysMenu)表服务接口
  *
- * @author makejava
+ * @author eddey.miao
  * @since 2020-02-13 20:03:01
  */
 public interface ISysMenuService {
+
+    List<SysMenu> loadSysMenus(List<Long> roleIds);
 
     /**
      * 通过ID查询单条数据

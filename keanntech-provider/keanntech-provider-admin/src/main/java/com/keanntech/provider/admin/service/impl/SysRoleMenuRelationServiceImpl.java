@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 角色资源表sys_role_menu_relation   资源表和角色表的中间表(SysRoleMenuRelation)表服务实现类
  *
- * @author miaoqingfu
+ * @author eddey.miao
  * @since 2020-02-28 19:55:06
  */
 @Service("sysRoleMenuRelationService")

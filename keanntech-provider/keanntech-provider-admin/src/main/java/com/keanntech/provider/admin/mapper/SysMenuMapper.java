@@ -15,6 +15,8 @@ import java.util.List;
 @Mapper
 public interface SysMenuMapper {
 
+    List<SysMenu> loadSysMenus(List<Long> roleIds);
+
     /**
      * 通过ID查询单条数据
      *

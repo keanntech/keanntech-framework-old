@@ -1,6 +1,5 @@
 package com.keanntech.provider.admin.controller;
 
-import com.keanntech.common.base.constants.GlobalsConstants;
 import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.base.reponse.ResponseDataUtil;
 import com.keanntech.common.base.reponse.ResultEnums;
@@ -11,7 +10,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -35,6 +33,7 @@ public class SysUserController {
 
     private ResponseData<SysUser> getUser(String userName){
         SysUser sysUser = sysUserService.loadUser(userName);
+        sysUser.setPassword("");
         if(Objects.isNull(sysUser)){
             sysUser.setPassword("");
             return ResponseDataUtil.buildSuccess(ResultEnums.USER_NOT_EXIST.getCode(), "用户" + userName + "不存在！");
