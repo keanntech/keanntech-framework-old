@@ -43,18 +43,18 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
 
         //获取TOKEN、USERNAME、METHOD进行验证
         String authentication = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        String userName = String.valueOf(request.getHeaders().get("UserName"));
         String method = request.getMethodValue();
 
-        //如果TOKEN、USERNAME为空返回401
+        //如果TOKEN为空返回401
         if(StringUtils.isEmpty(authentication)){
             return unauthorized(exchange);
         }
 
         //验证TOKEN是否合法；验证是否有URL、METHOD权限
-        if(oauthApi.hasPermission(authentication, userName, url, method)){
+        boolean isHasPermission = oauthApi.hasPermission(authentication, url, method);
+        if(isHasPermission){
             ServerHttpRequest.Builder builder = request.mutate();
-            builder.header("Authorization",authentication);
+            builder.header("Authorization", authentication);
             return chain.filter(exchange.mutate().request(builder.build()).build());
         }
 

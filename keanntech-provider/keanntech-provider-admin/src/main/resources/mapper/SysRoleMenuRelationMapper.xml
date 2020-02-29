@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.keanntech.provider.admin.mapper.SysRoleMenuRelationMapper">
+
+    <resultMap type="com.keanntech.common.model.po.SysRoleMenuRelation" id="SysRoleMenuRelationMap">
+        <result property="sysMenuId" column="sys_menu_id" jdbcType="INTEGER"/>
+        <result property="sysRoleId" column="sys_role_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysRoleMenuRelationMap">
+        select
+          sys_menu_id, sys_role_id
+        from keanntech_admin.sys_role_menu_relation
+        where sys_menu_id = #{sysMenuId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysRoleMenuRelationMap">
+        select
+          sys_menu_id, sys_role_id
+        from keanntech_admin.sys_role_menu_relation
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysRoleMenuRelationMap">
+        select
+          sys_menu_id, sys_role_id
+        from keanntech_admin.sys_role_menu_relation
+        <where>
+            <if test="sysMenuId != null">
+                and sys_menu_id = #{sysMenuId}
+            </if>
+            <if test="sysRoleId != null">
+                and sys_role_id = #{sysRoleId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="sysMenuId" useGeneratedKeys="true">
+        insert into keanntech_admin.sys_role_menu_relation()
+        values ()
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update keanntech_admin.sys_role_menu_relation
+        <set>
+        </set>
+        where sys_menu_id = #{sysMenuId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from keanntech_admin.sys_role_menu_relation where sys_menu_id = #{sysMenuId}
+    </delete>
+
+</mapper>

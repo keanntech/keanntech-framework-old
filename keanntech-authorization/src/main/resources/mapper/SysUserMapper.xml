@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.keanntech.provider.admin.mapper.SysUserMapper">
+<mapper namespace="com.keanntech.authorization.mapper.SysUserMapper">
     <resultMap id="SysUserResultMap" type="com.keanntech.common.model.po.SysUser">
         <id column="id" property="id"></id>
         <result column="create_id" property="createId"></result>
@@ -25,17 +25,14 @@
         <result column="credentials_non_expired" property="credentialsNonExpired"></result>
         <result column="account_non_locked" property="accountNonLocked"></result>
     </resultMap>
-
     <resultMap id="lazyLoadRoles" type="com.keanntech.common.model.po.SysUser" extends="SysUserResultMap">
-        <collection property="userRoles" ofType="com.keanntech.common.model.po.SysRole" select="com.keanntech.provider.admin.mapper.SysUserMapper.getRolesById" column="id"></collection>
+        <collection property="userRoles" ofType="com.keanntech.common.model.po.SysRole" select="com.keanntech.authorization.mapper.SysUserMapper.getRolesById" column="id"></collection>
     </resultMap>
-
-    <select id="loadUser" resultMap="lazyLoadRoles">
-        SELECT * from sys_user WHERE user_name = #{userName}
-    </select>
-
     <select id="getRolesById" resultType="com.keanntech.common.model.po.SysRole">
         SELECT role.* FROM sys_role role, sys_user_role_relation relation, sys_user user
         where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{id}
+    </select>
+    <select id="loadUser" resultMap="lazyLoadRoles">
+        SELECT * FROM sys_user WHERE user_name = #{userName}
     </select>
 </mapper>

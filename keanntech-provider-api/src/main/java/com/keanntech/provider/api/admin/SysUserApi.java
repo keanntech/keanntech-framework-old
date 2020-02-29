@@ -21,4 +21,9 @@ public interface SysUserApi {
             consumes = MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET)
     SysUser loadUser(@RequestParam("userName") String userName);
 
+    @PostMapping(
+            value = "/loaCurrentUser"
+    )
+    SysUser loadCurrentUser();
+
 }

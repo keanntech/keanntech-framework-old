@@ -8,6 +8,14 @@ spring:
       discovery:
         locator:
           enabled: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allow-credentials: true
+            allowed-origins: "*"
+            allowed-headers: "*"
+            allowed-methods: "*"
+            max-age: 3600
       routes:
       - id: gateway-route-authorization
         uri: ${keanntech.feignUrl.provider.auth}

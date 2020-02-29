@@ -1,16 +1,12 @@
 package com.keanntech.gateway.properties;
 
-import lombok.Data;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Configuration
-@ConditionalOnExpression("!'${ignore}'.isEmpty()")
 @ConfigurationProperties(prefix = "ignore")
 public class FilterIgnoreProperties {
 
@@ -21,4 +17,19 @@ public class FilterIgnoreProperties {
 
     private String[] webUnInterceptUris = {};
 
+    public List<String> getAuthUrls() {
+        return authUrls;
+    }
+
+    public String[] getWebUnInterceptUris() {
+        return webUnInterceptUris;
+    }
+
+    public void setAuthUrls(List<String> authUrls) {
+        this.authUrls = authUrls;
+    }
+
+    public void setWebUnInterceptUris(String[] webUnInterceptUris) {
+        this.webUnInterceptUris = webUnInterceptUris;
+    }
 }

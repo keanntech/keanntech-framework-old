@@ -18,14 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface OauthApi {
 
-    @PostMapping(value = "/loadClient")
-    OauthClient loadClientByClientId(@RequestParam("clientId") String clientId);
-
     @PostMapping(value = "/hasPermission")
-    boolean hasPermission(@RequestHeader(SecurityConstants.AUTH_HEADER) String authentication, @RequestHeader(SecurityConstants.AUTH_HEADER_USERNAME) String userName, @RequestParam("url") String url, @RequestParam("method") String method);
-
-    @PostMapping(value = "/loadUser")
-    SysUser loadUser(@RequestParam("userName") String userName);
+    boolean hasPermission(@RequestHeader(SecurityConstants.AUTH_HEADER) String authentication, @RequestParam("url") String url, @RequestParam("method") String method);
 
 
 
