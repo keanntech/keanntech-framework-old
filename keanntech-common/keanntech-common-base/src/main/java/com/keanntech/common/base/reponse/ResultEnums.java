@@ -11,7 +11,7 @@ public enum ResultEnums implements ErrorType {
 
     MENU_EMPTY(3000,"未设置菜单！"),
 
-    ROLE_EMPTY(4000, "权限为空！");
+    ROLE_EMPTY(4000, "未分配角色！");
 
     private Integer code;
     private String msg;
