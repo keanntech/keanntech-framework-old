@@ -18,9 +18,13 @@ spring:
             max-age: 3600
       routes:
       - id: gateway-route-authorization
-        uri: ${keanntech.feignUrl.provider.auth}
+        uri: ${keanntech.feignUrl.auth}
         predicates:
          - Path=/oauth/**
+      - id: gateway-route-authorization-api
+        uri: ${keanntech.feignUrl.auth}
+        predicates:
+          - Path=/api/oauth/**
       - id: gateway-route-provider-admin
         uri: ${keanntech.feignUrl.provider.admin}
         predicates:
@@ -35,4 +39,4 @@ keanntech:
   feignUrl:
     provider:
       admin: http://127.0.0.1:9003
-      auth: http://127.0.0.1:9001
+    auth: http://127.0.0.1:9001

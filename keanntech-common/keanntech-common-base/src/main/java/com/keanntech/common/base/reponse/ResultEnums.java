@@ -8,6 +8,8 @@ public enum ResultEnums implements ErrorType {
     ERROR(-1, "请求失败！"),
 
     USER_NOT_EXIST(2000,"用户不存在！"),
+    USERINFO_NOT_EMPTY(2001,"用户信息不能为空！"),
+    USERINFO_NOT_INTEGRATED(2002,"用户信息不完整！"),
 
     MENU_EMPTY(3000,"未设置菜单！"),
 

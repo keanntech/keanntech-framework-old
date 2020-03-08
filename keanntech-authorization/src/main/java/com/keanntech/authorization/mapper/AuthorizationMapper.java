@@ -8,4 +8,6 @@ public interface AuthorizationMapper {
 
     OauthClient loadClientByClientId(String clientId);
 
+    int insert(OauthClient oauthClient);
+
 }

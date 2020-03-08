@@ -7,7 +7,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.12.128:3306/keanntech_admin?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://192.168.12.128:3306/keanntech_admin?useUnicode=true&characterEncoding=utf8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
     name: keanntech
@@ -28,7 +28,7 @@ spring:
     filters: stat,wall,log4j
 
   redis:
-    host: 192.168.12.129
+    host: 192.168.12.128
     password: 123456
     timeout: 10000
     database: 0
@@ -80,3 +80,4 @@ keanntech:
   feignUrl:
     provider:
       admin: http://127.0.0.1:9003
+    auth: http://127.0.0.1:9001

@@ -10,7 +10,7 @@ import java.util.List;
  * @author eddey.miao
  * @since 2020-02-13 20:29:31
  */
-public interface SysDepartmentService {
+public interface ISysDepartmentService {
 
     /**
      * 通过ID查询单条数据

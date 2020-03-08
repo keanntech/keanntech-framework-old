@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,8 +16,8 @@ public class SysRole extends BasePO {
 
   private Long createId;
   private Long updateId;
-  private java.sql.Timestamp createDate;
-  private java.sql.Timestamp updateDate;
+  private Timestamp createDate;
+  private Timestamp updateDate;
   private String remark;
   private String deleted;
   private String roleName;

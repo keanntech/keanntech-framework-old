@@ -1,5 +1,6 @@
 package com.keanntech.provider.admin.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.keanntech.common.model.po.SysMenu;
 
 import java.util.List;
@@ -12,7 +13,14 @@ import java.util.List;
  */
 public interface ISysMenuService {
 
+    /**
+     * 根据角色ID查询该角色下的菜单
+     * @param roleIds
+     * @return
+     */
     List<SysMenu> loadSysMenus(List<Long> roleIds);
+
+    JSONArray createMenuTree(List<SysMenu> sysMenus);
 
     /**
      * 通过ID查询单条数据

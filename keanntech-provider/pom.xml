@@ -103,6 +103,11 @@
             <artifactId>jaxb-impl</artifactId>
             <version>${sun-xml-bind.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.keanntech.framework</groupId>
+            <artifactId>keanntech-common-uidgenerator</artifactId>
+            <version>${keanntech-common-uidgenerator.version}</version>
+        </dependency>
     </dependencies>
 
 

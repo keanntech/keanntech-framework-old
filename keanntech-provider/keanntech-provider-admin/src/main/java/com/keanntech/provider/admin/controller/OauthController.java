@@ -8,14 +8,21 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping("/api/oauth")
 public class OauthController {
 
     @Autowired
     IOauthService oauthService;
 
-    @PostMapping(value = "/hasPermission")
-    public boolean hasPermission(String url, String method, HttpServletRequest httpServletRequest){
+    /**
+     *  验证权限
+     * @param url
+     * @param method
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/hasPermission")
+    public boolean hasPermission(@RequestParam("url") String url, @RequestParam("method") String method, HttpServletRequest httpServletRequest){
         return oauthService.hasPermission(new CustomHttpServletRequestWrapper(httpServletRequest, url, method));
     }
 

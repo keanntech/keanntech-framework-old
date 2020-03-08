@@ -9,6 +9,7 @@
         <result column="update_id" property="updateId"></result>
         <result column="create_date" property="createDate"></result>
         <result column="update_date" property="updateDate"></result>
+        <result column="last_login_date" property="lastLoginDate" javaType="java.sql.Timestamp"></result>
         <result column="remark" property="remark"></result>
         <result column="deleted" property="deleted"></result>
         <result column="user_name" property="userName"></result>
@@ -30,12 +31,30 @@
         <collection property="userRoles" ofType="com.keanntech.common.model.po.SysRole" select="com.keanntech.provider.admin.mapper.SysUserMapper.getRolesById" column="id"></collection>
     </resultMap>
 
-    <select id="loadUser" resultMap="lazyLoadRoles">
+    <select id="loadUserByUserName" resultMap="lazyLoadRoles">
         SELECT * from sys_user WHERE user_name = #{userName}
+    </select>
+
+    <select id="loadUserByJobNumber" resultMap="SysUserResultMap">
+        SELECT * from sys_user WHERE job_number = #{jobNumber}
+    </select>
+
+    <select id="loadAllUsers" resultMap="SysUserResultMap" resultType="java.util.List">
+        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled FROM sys_user u
     </select>
 
     <select id="getRolesById" resultType="com.keanntech.common.model.po.SysRole">
         SELECT role.* FROM sys_role role, sys_user_role_relation relation, sys_user user
         where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{id}
     </select>
+
+    <insert id="saveUser">
+        INSERT INTO
+        sys_user (id,user_name,password,job_number,name,remark,email,phone,mobile,photo,
+        last_login_date,enabled,create_id,update_id,create_date,update_date)
+        VALUE (#{id},#{userName},#{password},#{jobNumber},#{name},#{remark},#{email},#{phone},#{mobile},#{photo},
+        #{lastLoginDate},#{enabled},#{createId},#{updateId},#{createDate},#{updateDate})
+    </insert>
+
+
 </mapper>

@@ -2,7 +2,7 @@ package com.keanntech.provider.admin.service.impl;
 
 import com.keanntech.common.model.po.SysDepartment;
 import com.keanntech.provider.admin.mapper.SysDepartmentMapper;
-import com.keanntech.provider.admin.service.SysDepartmentService;
+import com.keanntech.provider.admin.service.ISysDepartmentService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2020-02-13 20:29:31
  */
 @Service("sysDepartmentService")
-public class SysDepartmentServiceImpl implements SysDepartmentService {
+public class SysDepartmentServiceImpl implements ISysDepartmentService {
     @Resource
     private SysDepartmentMapper sysDepartmentMapper;
 

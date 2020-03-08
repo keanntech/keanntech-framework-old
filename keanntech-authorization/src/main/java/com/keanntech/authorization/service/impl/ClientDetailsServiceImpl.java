@@ -25,4 +25,9 @@ public class ClientDetailsServiceImpl implements IClientDetailsService {
         }
         return new ClientDetailsImpl(oauthClient);
     }
+
+    @Override
+    public int insertClient(OauthClient oauthClient) {
+        return authMapper.insert(oauthClient);
+    }
 }

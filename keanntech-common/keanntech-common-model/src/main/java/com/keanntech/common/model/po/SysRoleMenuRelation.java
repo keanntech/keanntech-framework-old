@@ -18,6 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class SysRoleMenuRelation implements Serializable {
+
     private static final long serialVersionUID = -86885654462828937L;
     /**
     * 系统资源id

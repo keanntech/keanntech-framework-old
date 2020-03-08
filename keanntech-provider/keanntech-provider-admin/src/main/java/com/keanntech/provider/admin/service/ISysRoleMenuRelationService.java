@@ -10,7 +10,7 @@ import java.util.List;
  * @author eddey.miao
  * @since 2020-02-28 19:55:05
  */
-public interface SysRoleMenuRelationService {
+public interface ISysRoleMenuRelationService {
 
     /**
      * 通过ID查询单条数据

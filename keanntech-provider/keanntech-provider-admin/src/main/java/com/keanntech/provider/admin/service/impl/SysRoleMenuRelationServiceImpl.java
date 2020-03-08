@@ -2,7 +2,7 @@ package com.keanntech.provider.admin.service.impl;
 
 import com.keanntech.common.model.po.SysRoleMenuRelation;
 import com.keanntech.provider.admin.mapper.SysRoleMenuRelationMapper;
-import com.keanntech.provider.admin.service.SysRoleMenuRelationService;
+import com.keanntech.provider.admin.service.ISysRoleMenuRelationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2020-02-28 19:55:06
  */
 @Service("sysRoleMenuRelationService")
-public class SysRoleMenuRelationServiceImpl implements SysRoleMenuRelationService {
+public class SysRoleMenuRelationServiceImpl implements ISysRoleMenuRelationService {
     @Resource
     private SysRoleMenuRelationMapper sysRoleMenuRelationMapper;
 

@@ -18,7 +18,18 @@
         <result column="is_scoped" property="isScoped"></result>
         <result column="is_secretre_quired" property="isSecretreQuired"></result>
     </resultMap>
+
     <select id="loadClientByClientId" resultMap="AuthorizationResultMap">
         SELECT * FROM oauth_client_details WHERE client_id = #{clientId}
     </select>
+
+    <insert id="insert">
+        INSERT INTO oauth_client_details(
+        client_id,resource_ids,client_secret,scope,authorized_grant_types,
+        registered_redirect_uris,authorities,access_token_validity,refresh_token_validity,
+        is_auto_approve,is_scoped,is_secretre_quired
+        ) values(
+        #{clientId},'',#{clientSecret},'all','client_credentials,authorization_code,mobile,password,refresh_token','','',7200,108000,1,1,1
+        )
+    </insert>
 </mapper>

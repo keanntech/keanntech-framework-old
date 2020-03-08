@@ -9,6 +9,7 @@
         <result column="update_id" property="updateId"></result>
         <result column="create_date" property="createDate"></result>
         <result column="update_date" property="updateDate"></result>
+        <result column="last_login_date" property="lastLoginDate"></result>
         <result column="remark" property="remark"></result>
         <result column="deleted" property="deleted"></result>
         <result column="user_name" property="userName"></result>

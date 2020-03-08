@@ -9,8 +9,14 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper {
 
-    SysUser loadUser(String userName);
+    SysUser loadUserByUserName(String userName);
+
+    SysUser loadUserByJobNumber(String jobNumber);
+
+    List<SysUser> loadAllUsers();
 
     List<SysRole> getRolesById(Long id);
+
+    int saveUser(SysUser sysUser);
 
 }
