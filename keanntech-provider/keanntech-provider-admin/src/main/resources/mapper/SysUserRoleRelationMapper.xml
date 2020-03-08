@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.keanntech.provider.admin.mapper.SysUserRoleRelationMapper">
+
+    <resultMap type="com.keanntech.common.model.po.SysUserRoleRelation" id="SysUserRoleRelationMap">
+        <result property="sysUserId" column="sys_user_id" jdbcType="INTEGER"/>
+        <result property="sysRoleId" column="sys_role_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysUserRoleRelationMap">
+        select
+          sys_user_id, sys_role_id
+        from keanntech_admin.sys_user_role_relation
+        where sys_user_id = #{sysUserId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysUserRoleRelationMap">
+        select
+          sys_user_id, sys_role_id
+        from keanntech_admin.sys_user_role_relation
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysUserRoleRelationMap">
+        select
+          sys_user_id, sys_role_id
+        from keanntech_admin.sys_user_role_relation
+        <where>
+            <if test="sysUserId != null">
+                and sys_user_id = #{sysUserId}
+            </if>
+            <if test="sysRoleId != null">
+                and sys_role_id = #{sysRoleId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into keanntech_admin.sys_user_role_relation(sys_user_id,sys_role_id)
+        values (#{sysUserId}, #{sysRoleId})
+    </insert>
+
+    <!--批量插入-->
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into sys_user_role_relation(sys_user_id,sys_role_id) values
+        <foreach collection="list" item="role" index="index" separator=",">
+            (#{role.sysUserId},#{role.sysRoleId})
+        </foreach>
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update keanntech_admin.sys_user_role_relation
+        <set>
+        </set>
+        where sys_user_id = #{sysUserId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from keanntech_admin.sys_user_role_relation where sys_user_id = #{sysUserId}
+    </delete>
+
+</mapper>

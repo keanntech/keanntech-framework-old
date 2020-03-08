@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.keanntech.provider.admin.mapper.SysRoleMapper">
+
+    <resultMap type="com.keanntech.common.model.po.SysRole" id="SysRoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createId" column="create_id" jdbcType="INTEGER"/>
+        <result property="updateId" column="update_id" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="enabled" column="enabled" jdbcType="BOOLEAN"/>
+        <result property="sysCompanyId" column="sys_company_id" jdbcType="INTEGER"/>
+        <result property="dataScope" column="data_scope" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysRoleMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope
+        from keanntech_admin.sys_role
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysRoleMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope
+        from keanntech_admin.sys_role
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysRoleMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope
+        from keanntech_admin.sys_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="createId != null">
+                and create_id = #{createId}
+            </if>
+            <if test="updateId != null">
+                and update_id = #{updateId}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="deleted != null">
+                and deleted = #{deleted}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="enabled != null">
+                and enabled = #{enabled}
+            </if>
+            <if test="sysCompanyId != null">
+                and sys_company_id = #{sysCompanyId}
+            </if>
+            <if test="dataScope != null and dataScope != ''">
+                and data_scope = #{dataScope}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into keanntech_admin.sys_role(create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope)
+        values (#{createId}, #{updateId}, #{createDate}, #{updateDate}, #{remark}, #{deleted}, #{roleName}, #{code}, #{enabled}, #{sysCompanyId}, #{dataScope})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update keanntech_admin.sys_role
+        <set>
+            <if test="createId != null">
+                create_id = #{createId},
+            </if>
+            <if test="updateId != null">
+                update_id = #{updateId},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled},
+            </if>
+            <if test="sysCompanyId != null">
+                sys_company_id = #{sysCompanyId},
+            </if>
+            <if test="dataScope != null and dataScope != ''">
+                data_scope = #{dataScope},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from keanntech_admin.sys_role where id = #{id}
+    </delete>
+
+</mapper>
