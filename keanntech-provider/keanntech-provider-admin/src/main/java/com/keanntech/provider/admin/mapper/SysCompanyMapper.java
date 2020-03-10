@@ -35,6 +35,8 @@ public interface SysCompanyMapper {
      */
     List<SysCompany> loadAllCompanies();
 
+    int saveCompany(SysCompany sysCompany);
+
 
     /**
      * 通过实体作为筛选条件查询
@@ -43,14 +45,6 @@ public interface SysCompanyMapper {
      * @return 对象列表
      */
     List<SysCompany> queryAll(SysCompany sysCompany);
-
-    /**
-     * 新增数据
-     *
-     * @param sysCompany 实例对象
-     * @return 影响行数
-     */
-    int insert(SysCompany sysCompany);
 
     /**
      * 修改数据

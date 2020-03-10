@@ -1,7 +1,6 @@
 package com.keanntech.authorization.service.impl;
 
 import com.keanntech.authorization.mapper.AuthorizationMapper;
-import com.keanntech.authorization.service.ClientDetailsImpl;
 import com.keanntech.authorization.service.IClientDetailsService;
 import com.keanntech.common.model.auth.OauthClient;
 import org.springframework.beans.factory.annotation.Autowired;

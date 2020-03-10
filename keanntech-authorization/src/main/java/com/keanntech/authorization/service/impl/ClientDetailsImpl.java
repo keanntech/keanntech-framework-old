@@ -1,4 +1,4 @@
-package com.keanntech.authorization.service;
+package com.keanntech.authorization.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.keanntech.common.model.auth.OauthClient;

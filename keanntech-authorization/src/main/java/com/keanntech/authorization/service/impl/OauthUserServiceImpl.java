@@ -2,7 +2,6 @@ package com.keanntech.authorization.service.impl;
 
 import com.keanntech.authorization.mapper.SysUserMapper;
 import com.keanntech.authorization.service.IOauthUserService;
-import com.keanntech.authorization.service.OauthUserDetails;
 import com.keanntech.common.model.po.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

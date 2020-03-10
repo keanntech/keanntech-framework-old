@@ -1,11 +1,20 @@
 package com.keanntech.provider.admin.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import com.baidu.fsg.uid.impl.CachedUidGenerator;
+import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.model.po.SysCompany;
 import com.keanntech.provider.admin.mapper.SysCompanyMapper;
 import com.keanntech.provider.admin.service.ISysCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -17,11 +26,20 @@ import java.util.List;
 @Service("sysCompanyService")
 public class SysCompanyServiceImpl implements ISysCompanyService {
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private SysCompanyMapper sysCompanyMapper;
+    private CachedUidGenerator cachedUidGenerator;
 
     @Autowired
     public void setSysCompanyMapper(SysCompanyMapper sysCompanyMapper) {
         this.sysCompanyMapper = sysCompanyMapper;
+    }
+
+    @Autowired
+    @Qualifier("cacheUidGenerator")
+    public void setCachedUidGenerator(CachedUidGenerator cachedUidGenerator) {
+        this.cachedUidGenerator = cachedUidGenerator;
     }
 
     /**
@@ -47,21 +65,28 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
         return this.sysCompanyMapper.queryAllByLimit(offset, limit);
     }
 
+    /**
+     * 加载所有公司
+     * @return
+     */
     @Override
     public List<SysCompany> loadAllCompanies() {
         return sysCompanyMapper.loadAllCompanies();
     }
 
-    /**
-     * 新增数据
-     *
-     * @param sysCompany 实例对象
-     * @return 实例对象
-     */
     @Override
-    public SysCompany insert(SysCompany sysCompany) {
-        this.sysCompanyMapper.insert(sysCompany);
-        return sysCompany;
+    @Transactional(rollbackFor = {ActionException.class}, isolation = Isolation.READ_COMMITTED)
+    public int saveCompany(SysCompany sysCompany) {
+        try{
+            LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            sysCompany.setCreateDate(timestamp);
+            sysCompany.setUpdateDate(timestamp);
+            sysCompany.setId(cachedUidGenerator.getUID());
+            return sysCompanyMapper.saveCompany(sysCompany);
+        }catch (ActionException e){
+            throw new ActionException();
+        }
     }
 
     /**

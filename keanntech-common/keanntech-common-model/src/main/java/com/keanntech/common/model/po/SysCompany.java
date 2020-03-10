@@ -1,6 +1,7 @@
 package com.keanntech.common.model.po;
 
 import com.keanntech.common.model.BasePO;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@ApiModel(value = "公司信息实体")
 public class SysCompany extends BasePO {
 
     /**

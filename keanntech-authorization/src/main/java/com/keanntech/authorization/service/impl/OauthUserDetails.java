@@ -1,4 +1,4 @@
-package com.keanntech.authorization.service;
+package com.keanntech.authorization.service.impl;
 
 import com.google.common.collect.Sets;
 import com.keanntech.common.model.po.SysRole;
