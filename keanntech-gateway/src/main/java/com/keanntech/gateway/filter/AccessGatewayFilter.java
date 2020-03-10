@@ -24,11 +24,19 @@ import java.util.stream.Stream;
 @Slf4j
 public class AccessGatewayFilter implements GlobalFilter, Ordered {
 
-    @Autowired
-    FilterIgnoreProperties ignorePropertiesConfig;
+    private FilterIgnoreProperties ignorePropertiesConfig;
+
+    private OauthApi oauthApi;
 
     @Autowired
-    OauthApi oauthApi;
+    public void setIgnorePropertiesConfig(FilterIgnoreProperties ignorePropertiesConfig) {
+        this.ignorePropertiesConfig = ignorePropertiesConfig;
+    }
+
+    @Autowired
+    public void setOauthApi(OauthApi oauthApi) {
+        this.oauthApi = oauthApi;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

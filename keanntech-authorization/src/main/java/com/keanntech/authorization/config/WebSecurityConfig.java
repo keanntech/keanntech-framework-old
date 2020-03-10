@@ -26,23 +26,42 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${keanntech.front.loginUrl}")
     private String frontLoginUrl;
 
-    @Autowired
-    IOauthUserService oauthUserService;
+    private IOauthUserService oauthUserService;
+    private FilterIgnoreProperties ignorePropertiesConfig;
+    private AuthenticationAccessDeniedHandler deniedHandler;
+    private LoginSuccessHandler loginSuccessHandler;
+    private LoginOutSuccessHandler loginOutSuccessHandler;
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
-    FilterIgnoreProperties ignorePropertiesConfig;
+    public void setOauthUserService(IOauthUserService oauthUserService) {
+        this.oauthUserService = oauthUserService;
+    }
 
     @Autowired
-    AuthenticationAccessDeniedHandler deniedHandler;
+    public void setIgnorePropertiesConfig(FilterIgnoreProperties ignorePropertiesConfig) {
+        this.ignorePropertiesConfig = ignorePropertiesConfig;
+    }
 
     @Autowired
-    LoginSuccessHandler loginSuccessHandler;
+    public void setDeniedHandler(AuthenticationAccessDeniedHandler deniedHandler) {
+        this.deniedHandler = deniedHandler;
+    }
 
     @Autowired
-    LoginOutSuccessHandler loginOutSuccessHandler;
+    public void setLoginSuccessHandler(LoginSuccessHandler loginSuccessHandler) {
+        this.loginSuccessHandler = loginSuccessHandler;
+    }
 
     @Autowired
-    LoginFailureHandler loginFailureHandler;
+    public void setLoginOutSuccessHandler(LoginOutSuccessHandler loginOutSuccessHandler) {
+        this.loginOutSuccessHandler = loginOutSuccessHandler;
+    }
+
+    @Autowired
+    public void setLoginFailureHandler(LoginFailureHandler loginFailureHandler) {
+        this.loginFailureHandler = loginFailureHandler;
+    }
 
 
     @Override

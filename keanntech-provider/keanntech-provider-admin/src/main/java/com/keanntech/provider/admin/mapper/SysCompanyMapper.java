@@ -1,23 +1,16 @@
 package com.keanntech.provider.admin.mapper;
 
-import com.keanntech.common.model.po.SysMenu;
-import org.apache.ibatis.annotations.Mapper;
+import com.keanntech.common.model.po.SysCompany;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
- * 系统菜单sys_menu, 资源树，按钮(SysMenu)表数据库访问层
+ * 公司表，为了实现对不同公司提供服务，提供出一个公司信息表(SysCompany)表数据库访问层
  *
- * @author makejava
- * @since 2020-02-13 20:03:00
+ * @author eddey.miao
+ * @since 2020-03-09 21:39:48
  */
-@Mapper
-public interface SysMenuMapper {
-
-    List<SysMenu> loadSysMenus(List<Long> roleIds);
-
-    List<SysMenu> loadAllSysMenus();
+public interface SysCompanyMapper {
 
     /**
      * 通过ID查询单条数据
@@ -25,7 +18,7 @@ public interface SysMenuMapper {
      * @param id 主键
      * @return 实例对象
      */
-    SysMenu queryById(Long id);
+    SysCompany queryById(Long id);
 
     /**
      * 查询指定行数据
@@ -34,32 +27,38 @@ public interface SysMenuMapper {
      * @param limit 查询条数
      * @return 对象列表
      */
-    List<SysMenu> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+    List<SysCompany> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * 查询所有未删除的数据
+     * @return
+     */
+    List<SysCompany> loadAllCompanies();
 
 
     /**
      * 通过实体作为筛选条件查询
      *
-     * @param sysMenu 实例对象
+     * @param sysCompany 实例对象
      * @return 对象列表
      */
-    List<SysMenu> queryAll(SysMenu sysMenu);
+    List<SysCompany> queryAll(SysCompany sysCompany);
 
     /**
      * 新增数据
      *
-     * @param sysMenu 实例对象
+     * @param sysCompany 实例对象
      * @return 影响行数
      */
-    int insert(SysMenu sysMenu);
+    int insert(SysCompany sysCompany);
 
     /**
      * 修改数据
      *
-     * @param sysMenu 实例对象
+     * @param sysCompany 实例对象
      * @return 影响行数
      */
-    int update(SysMenu sysMenu);
+    int update(SysCompany sysCompany);
 
     /**
      * 通过主键删除数据

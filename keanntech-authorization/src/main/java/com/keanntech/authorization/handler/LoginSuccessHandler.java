@@ -1,10 +1,8 @@
 package com.keanntech.authorization.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.keanntech.authorization.service.IClientDetailsService;
 import com.keanntech.authorization.token.AuthJwtTokenEnhancer;
 import com.keanntech.common.base.constants.GlobalsConstants;
@@ -45,14 +43,24 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Autowired
-    IClientDetailsService clientDetailsService;
+    private IClientDetailsService clientDetailsService;
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    private RedisUtil redisUtil;
 
     @Autowired
-    JwtAccessTokenConverter jwtAccessTokenConverter;
+    public void setClientDetailsService(IClientDetailsService clientDetailsService) {
+        this.clientDetailsService = clientDetailsService;
+    }
 
     @Autowired
-    RedisUtil redisUtil;
+    public void setJwtAccessTokenConverter(JwtAccessTokenConverter jwtAccessTokenConverter) {
+        this.jwtAccessTokenConverter = jwtAccessTokenConverter;
+    }
+
+    @Autowired
+    public void setRedisUtil(RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {

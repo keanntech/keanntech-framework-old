@@ -20,6 +20,13 @@ public interface ISysMenuService {
      */
     List<SysMenu> loadSysMenus(List<Long> roleIds);
 
+    List<SysMenu> loadAllSysMenus();
+
+    /**
+     * 创建菜单树
+     * @param sysMenus
+     * @return
+     */
     JSONArray createMenuTree(List<SysMenu> sysMenus);
 
     /**

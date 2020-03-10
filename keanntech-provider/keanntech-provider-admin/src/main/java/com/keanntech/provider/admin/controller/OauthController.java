@@ -11,8 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/oauth")
 public class OauthController {
 
+    private IOauthService oauthService;
+
     @Autowired
-    IOauthService oauthService;
+    public void setOauthService(IOauthService oauthService) {
+        this.oauthService = oauthService;
+    }
 
     /**
      *  验证权限

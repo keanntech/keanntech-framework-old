@@ -1,5 +1,6 @@
 package com.keanntech.common.model.auth;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@ApiModel(value = "客户端实体")
 public class OauthClient implements Serializable {
 
     private static final long serialVersionUID = -5929714592823290134L;

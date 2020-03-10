@@ -25,15 +25,25 @@ public class SysUserServiceImpl implements ISysUserService {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    private SysUserMapper sysUserMapper;
+    private CachedUidGenerator cachedUidGenerator;
+    private OauthClientApi oauthClientApi;
+
     @Autowired
-    SysUserMapper sysUserMapper;
+    public void setSysUserMapper(SysUserMapper sysUserMapper) {
+        this.sysUserMapper = sysUserMapper;
+    }
 
     @Autowired
     @Qualifier("cacheUidGenerator")
-    CachedUidGenerator cachedUidGenerator;
+    public void setCachedUidGenerator(CachedUidGenerator cachedUidGenerator) {
+        this.cachedUidGenerator = cachedUidGenerator;
+    }
 
     @Autowired
-    OauthClientApi oauthClientApi;
+    public void setOauthClientApi(OauthClientApi oauthClientApi) {
+        this.oauthClientApi = oauthClientApi;
+    }
 
     @Override
     public SysUser loadUserByUserName(String userName) {
@@ -75,11 +85,15 @@ public class SysUserServiceImpl implements ISysUserService {
 
         int isSaved = saveUser(sysUser);
         if(isSaved > 0){
-            oauthClient.setClientId(sysUser.getUserName());
-            oauthClient.setClientSecret(sysUser.getPassword());
-            isSaved = oauthClientApi.createClient(oauthClient);
-            if(isSaved > 0){
-                return true;
+            try {
+                oauthClient.setClientId(sysUser.getUserName());
+                oauthClient.setClientSecret(sysUser.getPassword());
+                isSaved = oauthClientApi.createClient(oauthClient);
+                if(isSaved > 0){
+                    return true;
+                }
+            } catch (Exception e) {
+                return false;
             }
         }
 

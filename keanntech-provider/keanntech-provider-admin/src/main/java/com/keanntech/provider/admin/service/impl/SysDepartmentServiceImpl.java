@@ -3,9 +3,9 @@ package com.keanntech.provider.admin.service.impl;
 import com.keanntech.common.model.po.SysDepartment;
 import com.keanntech.provider.admin.mapper.SysDepartmentMapper;
 import com.keanntech.provider.admin.service.ISysDepartmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,8 +16,13 @@ import java.util.List;
  */
 @Service("sysDepartmentService")
 public class SysDepartmentServiceImpl implements ISysDepartmentService {
-    @Resource
+
     private SysDepartmentMapper sysDepartmentMapper;
+
+    @Autowired
+    public void setSysDepartmentMapper(SysDepartmentMapper sysDepartmentMapper) {
+        this.sysDepartmentMapper = sysDepartmentMapper;
+    }
 
     /**
      * 通过ID查询单条数据

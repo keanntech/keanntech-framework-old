@@ -30,6 +30,8 @@ public class SysUser extends BasePO {
   private String phone;
   private String mobile;
   private String photo;
+  private Boolean superAdmin;
+  private Boolean admin;
   private Boolean enabled;
   private Long sysCompanyId;
   private Boolean accountNonExpired;

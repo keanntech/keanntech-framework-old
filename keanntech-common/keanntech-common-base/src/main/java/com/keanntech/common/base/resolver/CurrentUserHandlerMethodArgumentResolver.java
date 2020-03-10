@@ -3,7 +3,7 @@ package com.keanntech.common.base.resolver;
 import com.keanntech.common.base.constants.SecurityConstants;
 import com.keanntech.common.base.oauth.JWTHelper;
 import com.keanntech.common.base.utils.OauthUtil;
-import com.keanntech.common.model.methodresolverparam.CurrentUserResolverParam;
+import com.keanntech.common.model.methodresolver.CurrentUserResolver;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
@@ -36,7 +36,7 @@ public class CurrentUserHandlerMethodArgumentResolver implements HandlerMethodAr
         if(Objects.isNull(claims)){
             return null;
         }
-        CurrentUserResolverParam currentUser = new CurrentUserResolverParam();
+        CurrentUserResolver currentUser = new CurrentUserResolver();
         currentUser.setId(Long.valueOf(String.valueOf(claims.get("id"))));
         currentUser.setJobNumber(String.valueOf(claims.get("jobNumber")));
         currentUser.setName(String.valueOf(claims.get("name")));

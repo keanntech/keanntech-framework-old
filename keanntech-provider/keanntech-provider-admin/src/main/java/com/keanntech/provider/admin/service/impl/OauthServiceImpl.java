@@ -22,17 +22,30 @@ import java.util.Objects;
 @Service("oauthService")
 public class OauthServiceImpl implements IOauthService {
 
-    @Autowired
-    SysUserMapper sysUserMapper;
+    private SysUserMapper sysUserMapper;
+    private AuthorizationMapper authorizationMapper;
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    private RedisUtil redisUtil;
 
     @Autowired
-    AuthorizationMapper authorizationMapper;
+    public void setSysUserMapper(SysUserMapper sysUserMapper) {
+        this.sysUserMapper = sysUserMapper;
+    }
 
     @Autowired
-    JwtAccessTokenConverter jwtAccessTokenConverter;
+    public void setAuthorizationMapper(AuthorizationMapper authorizationMapper) {
+        this.authorizationMapper = authorizationMapper;
+    }
 
     @Autowired
-    RedisUtil redisUtil;
+    public void setJwtAccessTokenConverter(JwtAccessTokenConverter jwtAccessTokenConverter) {
+        this.jwtAccessTokenConverter = jwtAccessTokenConverter;
+    }
+
+    @Autowired
+    public void setRedisUtil(RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
+    }
 
     @Override
     public boolean hasPermission(HttpServletRequest authRequest) {

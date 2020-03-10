@@ -20,6 +20,7 @@
         <result column="phone" property="phone"></result>
         <result column="mobile" property="mobile"></result>
         <result column="photo" property="photo"></result>
+        <result column="super_admin" property="superAdmin"></result>
         <result column="enabled" property="enabled"></result>
         <result column="sys_company_id" property="sysCompanyId"></result>
         <result column="account_non_expired" property="accountNonExpired"></result>

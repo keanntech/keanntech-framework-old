@@ -28,18 +28,31 @@ import java.util.concurrent.TimeUnit;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    IClientDetailsService clientDetailsService;
+    private IClientDetailsService clientDetailsService;
+    private IOauthUserService oauthUserService;
+    private AuthenticationManager authenticationManager;
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @Autowired
-    IOauthUserService oauthUserService;
+    public void setClientDetailsService(IClientDetailsService clientDetailsService) {
+        this.clientDetailsService = clientDetailsService;
+    }
+
+    @Autowired
+    public void setOauthUserService(IOauthUserService oauthUserService) {
+        this.oauthUserService = oauthUserService;
+    }
 
     @Autowired
     @Qualifier("authenticationManagerBean")
-    AuthenticationManager authenticationManager;
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
     @Autowired
-    JwtAccessTokenConverter jwtAccessTokenConverter;
+    public void setJwtAccessTokenConverter(JwtAccessTokenConverter jwtAccessTokenConverter) {
+        this.jwtAccessTokenConverter = jwtAccessTokenConverter;
+    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {

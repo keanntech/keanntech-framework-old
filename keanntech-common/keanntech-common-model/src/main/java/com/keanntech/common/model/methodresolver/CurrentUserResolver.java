@@ -1,4 +1,4 @@
-package com.keanntech.common.model.methodresolverparam;
+package com.keanntech.common.model.methodresolver;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class CurrentUserResolverParam {
+public class CurrentUserResolver {
 
     private Long id;
     private String userName;

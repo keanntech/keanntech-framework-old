@@ -21,8 +21,12 @@ import java.util.stream.Collectors;
 @Service("sysMenuService")
 public class SysMenuServiceImpl implements ISysMenuService {
 
-    @Autowired
     private SysMenuMapper sysMenuMapper;
+
+    @Autowired
+    public void setSysMenuMapper(SysMenuMapper sysMenuMapper) {
+        this.sysMenuMapper = sysMenuMapper;
+    }
 
     /**
      * 根据角色ID加载该角色拥有的菜单
@@ -32,6 +36,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public List<SysMenu> loadSysMenus(List<Long> roleIds){
         return sysMenuMapper.loadSysMenus(roleIds);
+    }
+
+    @Override
+    public List<SysMenu> loadAllSysMenus() {
+        return sysMenuMapper.loadAllSysMenus();
     }
 
     /**

@@ -4700,6 +4700,7 @@ CREATE TABLE `sys_user` (
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注信息',
   `deleted` bit(1) COLLATE utf8_bin DEFAULT 0 COMMENT '删除标记0：正常；1：删除；',
   `super_admin` bit(1) COLLATE utf8_bin DEFAULT 0 COMMENT '是否是超级管理员0：不是；1：是；',
+  `admin` bit(1) COLLATE utf8_bin DEFAULT 0 COMMENT '是否是公司管理员0：不是；1：是；',
   `user_name` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '登录用户名',
   `password` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '登录密码',
   `job_number` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '工号',

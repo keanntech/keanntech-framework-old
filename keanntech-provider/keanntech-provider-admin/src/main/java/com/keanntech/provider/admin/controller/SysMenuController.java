@@ -1,11 +1,15 @@
 package com.keanntech.provider.admin.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.keanntech.common.base.annotation.CurrentUser;
 import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.base.reponse.ResponseDataUtil;
 import com.keanntech.common.base.reponse.ResultEnums;
+import com.keanntech.common.model.methodresolver.CurrentUserResolver;
 import com.keanntech.common.model.po.SysMenu;
+import com.keanntech.common.model.po.SysUser;
 import com.keanntech.provider.admin.service.ISysMenuService;
+import com.keanntech.provider.admin.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,8 +28,18 @@ import java.util.Objects;
 @RequestMapping("/api/admin/sysMenu")
 public class SysMenuController {
 
+    private ISysMenuService sysMenuService;
+    private ISysUserService sysUserService;
+
     @Autowired
-    ISysMenuService sysMenuService;
+    public void setSysMenuService(ISysMenuService sysMenuService) {
+        this.sysMenuService = sysMenuService;
+    }
+
+    @Autowired
+    public void setSysUserService(ISysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
 
     /**
      * 根据角色ID获取菜单
@@ -37,8 +51,15 @@ public class SysMenuController {
             @ApiImplicitParam(name = "roleIds", value = "角色ID", required = true, dataType = "List")
     })
     @PostMapping("/loadMenus")
-    public ResponseData<SysMenu> loadMenusByRole(@RequestBody List<Long> roleIds){
-        List<SysMenu> sysMenus = sysMenuService.loadSysMenus(roleIds);
+    public ResponseData<SysMenu> loadMenusByRole(@RequestBody List<Long> roleIds, @CurrentUser CurrentUserResolver currentUser){
+        SysUser sysUser = sysUserService.loadUserByUserName(currentUser.getUserName());
+        List<SysMenu> sysMenus;
+        if(sysUser.getSuperAdmin()){
+            sysMenus = sysMenuService.loadAllSysMenus();
+        }else{
+            sysMenus = sysMenuService.loadSysMenus(roleIds);
+        }
+
         if(Objects.isNull(sysMenus)){
             return ResponseDataUtil.buildError(ResultEnums.MENU_EMPTY.getCode(),"未设置菜单，请与管理员联系");
         }

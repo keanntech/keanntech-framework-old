@@ -3,9 +3,9 @@ package com.keanntech.provider.admin.service.impl;
 import com.keanntech.common.model.po.SysRole;
 import com.keanntech.provider.admin.mapper.SysRoleMapper;
 import com.keanntech.provider.admin.service.ISysRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,8 +16,13 @@ import java.util.List;
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl implements ISysRoleService {
-    @Resource
+
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    public void setSysRoleMapper(SysRoleMapper sysRoleMapper) {
+        this.sysRoleMapper = sysRoleMapper;
+    }
 
     /**
      * 通过ID查询单条数据

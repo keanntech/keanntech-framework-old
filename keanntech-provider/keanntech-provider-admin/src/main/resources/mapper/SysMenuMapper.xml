@@ -22,6 +22,7 @@
         <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <!--根据角色ID查询-->
     <select id="loadSysMenus" parameterType="java.util.List" resultMap="SysMenuMap">
         select
           menu.* from sys_menu menu, sys_role_menu_relation menurela
@@ -30,6 +31,10 @@
             #{item}
         </foreach>
         order by menu.sort asc
+    </select>
+
+    <select id="loadAllSysMenus" resultMap="SysMenuMap">
+        SELECT * FROM sys_menu
     </select>
 
     <!--查询单个-->

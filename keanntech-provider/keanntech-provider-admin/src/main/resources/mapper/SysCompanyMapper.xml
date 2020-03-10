@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.keanntech.provider.admin.mapper.SysCompanyMapper">
+
+    <resultMap type="com.keanntech.common.model.po.SysCompany" id="SysCompanyMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createId" column="create_id" jdbcType="INTEGER"/>
+        <result property="updateId" column="update_id" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="areaId" column="area_id" jdbcType="VARCHAR"/>
+        <result property="zipCode" column="zip_code" jdbcType="VARCHAR"/>
+        <result property="master" column="master" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="fax" column="fax" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="copyright" column="copyright" jdbcType="VARCHAR"/>
+        <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysCompanyMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
+        from keanntech_admin.sys_company
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysCompanyMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
+        from keanntech_admin.sys_company
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="loadAllCompanies" resultMap="SysCompanyMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
+        from keanntech_admin.sys_company WHERE deleted = 0
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysCompanyMap">
+        select
+          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
+        from keanntech_admin.sys_company
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="createId != null">
+                and create_id = #{createId}
+            </if>
+            <if test="updateId != null">
+                and update_id = #{updateId}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="deleted != null">
+                and deleted = #{deleted}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and area_id = #{areaId}
+            </if>
+            <if test="zipCode != null and zipCode != ''">
+                and zip_code = #{zipCode}
+            </if>
+            <if test="master != null and master != ''">
+                and master = #{master}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="fax != null and fax != ''">
+                and fax = #{fax}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="copyright != null and copyright != ''">
+                and copyright = #{copyright}
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company_name = #{companyName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into keanntech_admin.sys_company(create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name)
+        values (#{createId}, #{updateId}, #{createDate}, #{updateDate}, #{remark}, #{deleted}, #{address}, #{areaId}, #{zipCode}, #{master}, #{phone}, #{mobile}, #{fax}, #{email}, #{copyright}, #{companyName})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update keanntech_admin.sys_company
+        <set>
+            <if test="createId != null">
+                create_id = #{createId},
+            </if>
+            <if test="updateId != null">
+                update_id = #{updateId},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="areaId != null and areaId != ''">
+                area_id = #{areaId},
+            </if>
+            <if test="zipCode != null and zipCode != ''">
+                zip_code = #{zipCode},
+            </if>
+            <if test="master != null and master != ''">
+                master = #{master},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="fax != null and fax != ''">
+                fax = #{fax},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="copyright != null and copyright != ''">
+                copyright = #{copyright},
+            </if>
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from keanntech_admin.sys_company where id = #{id}
+    </delete>
+
+</mapper>

@@ -47,15 +47,23 @@ encrypt:
     password: eddy456qwer
     type: jks
 
+swagger:
+  base-package: com.keanntech.authorization.controller
+
+
 ignore:
   authUrls:
     - /oauth/**
     - /actuator/**
     - /druid/**
-    - /v2/api-docs
     - /swagger-ui.html
+    - /v2/api-docs
+    - /swagger-resources/configuration/ui
+    - /swagger-resources
+    - /swagger-resources/configuration/security
     - /swagger-resources/**
-  webUnInterceptUris: /v2/api-docs,/swagger-ui.html,/swagger-resources/**,/webjars/**,/oauth/**,/actuator/**,/druid/**
+    - /webjars/**
+  webUnInterceptUris: /webjars/**,/swagger-ui.html,/v2/api-docs,/swagger-resources/configuration/ui,/swagger-resources,/swagger-resources/configuration/security,/swagger-resources/**,/oauth/**,/actuator/**,/druid/**
 
 keanntech:
   front:

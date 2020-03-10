@@ -1,37 +1,24 @@
 package com.keanntech.provider.admin.controller;
 
-import cn.hutool.core.date.DateUtil;
 import com.keanntech.common.base.annotation.CurrentUser;
-import com.keanntech.common.base.constants.SecurityConstants;
 import com.keanntech.common.base.controller.BaseController;
-import com.keanntech.common.base.oauth.JWTHelper;
 import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.base.reponse.ResponseDataUtil;
 import com.keanntech.common.base.reponse.ResultEnums;
 import com.keanntech.common.model.auth.OauthClient;
-import com.keanntech.common.model.methodresolverparam.CurrentUserResolverParam;
+import com.keanntech.common.model.methodresolver.CurrentUserResolver;
 import com.keanntech.common.model.po.SysRole;
 import com.keanntech.common.model.po.SysUser;
-import com.keanntech.common.model.po.SysUserRoleRelation;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
 import com.keanntech.provider.admin.service.ISysUserService;
-import com.keanntech.common.base.utils.OauthUtil;
-import com.keanntech.provider.api.auth.OauthClientApi;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,13 +28,18 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/admin/sysUser")
 public class SysUserController extends BaseController {
 
-
-
-    @Autowired
-    ISysUserService sysUserService;
+    private ISysUserService sysUserService;
+    private ISysUserRoleRelationService sysUserRoleRelationService;
 
     @Autowired
-    ISysUserRoleRelationService sysUserRoleRelationService;
+    public void setSysUserService(ISysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
+
+    @Autowired
+    public void setSysUserRoleRelationService(ISysUserRoleRelationService sysUserRoleRelationService) {
+        this.sysUserRoleRelationService = sysUserRoleRelationService;
+    }
 
     @GetMapping(value = "/loadUser")
     @ApiOperation(value = "根据用户名获取用户信息")
@@ -71,8 +63,12 @@ public class SysUserController extends BaseController {
     }
 
     @PostMapping("/saveUser")
+    @ApiOperation(value = "保存用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sysUser", value = "用户信息", required = true)
+    })
     public ResponseData<SysUser> saveUser(
-            @NotNull(message = "用户信息不能为空！") @RequestBody SysUser sysUser, @CurrentUser CurrentUserResolverParam currentUser) {
+            @NotNull(message = "用户信息不能为空！") @RequestBody SysUser sysUser, @CurrentUser CurrentUserResolver currentUser) {
         //验证用户名、工号是否重复
         SysUser user = sysUserService.loadUserByUserName(sysUser.getUserName());
         if(!Objects.isNull(user)){

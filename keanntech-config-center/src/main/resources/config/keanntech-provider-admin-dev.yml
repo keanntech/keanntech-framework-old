@@ -62,14 +62,21 @@ ignore:
     - /oauth/**
     - /actuator/**
     - /druid/**
-    - /v2/api-docs
     - /swagger-ui.html
+    - /v2/api-docs
+    - /swagger-resources/configuration/ui
+    - /swagger-resources
+    - /swagger-resources/configuration/security
     - /swagger-resources/**
-  webUnInterceptUris: /v2/api-docs,/swagger-ui.html,/swagger-resources/**,/webjars/**,/oauth/**,/actuator/**,/druid/**
+    - /webjars/**
+  webUnInterceptUris: /webjars/**,/swagger-ui.html,/v2/api-docs,/swagger-resources/configuration/ui,/swagger-resources,/swagger-resources/configuration/security,/swagger-resources/**,/oauth/**,/actuator/**,/druid/**
 
 feign:
   httpclient:
     enabled: true
+
+swagger:
+  base-package: com.keanntech.provider.admin.controller
 
 ribbon:
   MaxAutoRetries: 3

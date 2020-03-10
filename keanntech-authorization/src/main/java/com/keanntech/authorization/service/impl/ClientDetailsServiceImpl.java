@@ -14,8 +14,12 @@ import java.util.Objects;
 @Service
 public class ClientDetailsServiceImpl implements IClientDetailsService {
 
+    private AuthorizationMapper authMapper;
+
     @Autowired
-    AuthorizationMapper authMapper;
+    public void setAuthMapper(AuthorizationMapper authMapper) {
+        this.authMapper = authMapper;
+    }
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {

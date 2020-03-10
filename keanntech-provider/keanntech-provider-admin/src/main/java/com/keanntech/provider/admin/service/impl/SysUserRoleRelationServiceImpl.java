@@ -3,9 +3,9 @@ package com.keanntech.provider.admin.service.impl;
 import com.keanntech.common.model.po.SysUserRoleRelation;
 import com.keanntech.provider.admin.mapper.SysUserRoleRelationMapper;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +18,12 @@ import java.util.List;
 @Service("sysUserRoleRelationService")
 public class SysUserRoleRelationServiceImpl implements ISysUserRoleRelationService {
 
-    @Resource
     private SysUserRoleRelationMapper sysUserRoleRelationMapper;
+
+    @Autowired
+    public void setSysUserRoleRelationMapper(SysUserRoleRelationMapper sysUserRoleRelationMapper) {
+        this.sysUserRoleRelationMapper = sysUserRoleRelationMapper;
+    }
 
     /**
      * 通过ID查询单条数据

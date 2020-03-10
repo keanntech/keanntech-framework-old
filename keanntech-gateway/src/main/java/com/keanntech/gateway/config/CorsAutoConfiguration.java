@@ -12,8 +12,12 @@ import org.springframework.web.util.pattern.PathPatternParser;
 @Configuration
 public class CorsAutoConfiguration {
 
-    @Autowired
     private  GlobalCorsProperties globalCorsProperties;
+
+    @Autowired
+    public void setGlobalCorsProperties(GlobalCorsProperties globalCorsProperties) {
+        this.globalCorsProperties = globalCorsProperties;
+    }
 
     @Bean
     @ConditionalOnMissingBean(name = "corsFilter")

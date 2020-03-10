@@ -18,7 +18,7 @@ public class AuthJwtTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
 
-        final Map<String, Object> additionalInfo = new HashMap<>(6);
+        final Map<String, Object> additionalInfo = new HashMap<>(8);
         SysUser user = (SysUser) oAuth2Authentication.getUserAuthentication().getPrincipal();
         List<SysRole> roles = user.getUserRoles();
         List<Long> roleIds = null;
@@ -31,6 +31,8 @@ public class AuthJwtTokenEnhancer implements TokenEnhancer {
         additionalInfo.put("jobNumber", user.getJobNumber());
         additionalInfo.put("photo", user.getPhoto());
         additionalInfo.put("roleIds", roleIds);
+        additionalInfo.put("superAdmin", user.getSuperAdmin());
+        additionalInfo.put("admin", user.getAdmin());
         ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(additionalInfo);
         return oAuth2AccessToken;
 

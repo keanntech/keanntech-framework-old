@@ -15,8 +15,12 @@ import java.util.Objects;
 @Service
 public class OauthUserServiceImpl implements IOauthUserService {
 
+    private SysUserMapper sysUserMapper;
+
     @Autowired
-    SysUserMapper sysUserMapper;
+    public void setSysUserMapper(SysUserMapper sysUserMapper) {
+        this.sysUserMapper = sysUserMapper;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

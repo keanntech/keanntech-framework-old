@@ -20,6 +20,7 @@
         <result column="phone" property="phone"></result>
         <result column="mobile" property="mobile"></result>
         <result column="photo" property="photo"></result>
+        <result column="super_admin" property="superAdmin"></result>
         <result column="enabled" property="enabled"></result>
         <result column="sys_company_id" property="sysCompanyId"></result>
         <result column="account_non_expired" property="accountNonExpired"></result>
@@ -32,20 +33,20 @@
     </resultMap>
 
     <select id="loadUserByUserName" resultMap="lazyLoadRoles">
-        SELECT * from sys_user WHERE user_name = #{userName}
+        SELECT * from sys_user WHERE user_name = #{userName} AND deleted = 0
     </select>
 
     <select id="loadUserByJobNumber" resultMap="SysUserResultMap">
-        SELECT * from sys_user WHERE job_number = #{jobNumber}
+        SELECT * from sys_user WHERE job_number = #{jobNumber} AND deleted = 0
     </select>
 
     <select id="loadAllUsers" resultMap="SysUserResultMap" resultType="java.util.List">
-        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled FROM sys_user u
+        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled FROM sys_user u WHERE u.deleted = 0
     </select>
 
     <select id="getRolesById" resultType="com.keanntech.common.model.po.SysRole">
         SELECT role.* FROM sys_role role, sys_user_role_relation relation, sys_user user
-        where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{id}
+        where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{id} AND user.deleted = 0
     </select>
 
     <insert id="saveUser">
