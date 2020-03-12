@@ -17,7 +17,7 @@ public class ClientDetailController {
 
     @Autowired
     public void setClientDetailsService(IClientDetailsService clientDetailsService){
-        clientDetailsService = clientDetailsService;
+        this.clientDetailsService = clientDetailsService;
     }
 
     @PostMapping("/createClient")

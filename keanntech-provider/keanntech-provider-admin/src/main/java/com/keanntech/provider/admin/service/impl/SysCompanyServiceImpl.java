@@ -54,18 +54,6 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
     }
 
     /**
-     * 查询多条数据
-     *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
-     */
-    @Override
-    public List<SysCompany> queryAllByLimit(int offset, int limit) {
-        return this.sysCompanyMapper.queryAllByLimit(offset, limit);
-    }
-
-    /**
      * 加载所有公司
      * @return
      */
@@ -74,6 +62,11 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
         return sysCompanyMapper.loadAllCompanies();
     }
 
+    /**
+     * 保存公司信息
+     * @param sysCompany
+     * @return
+     */
     @Override
     @Transactional(rollbackFor = {ActionException.class}, isolation = Isolation.READ_COMMITTED)
     public int saveCompany(SysCompany sysCompany) {
@@ -96,9 +89,17 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
      * @return 实例对象
      */
     @Override
+    @Transactional(rollbackFor = ActionException.class, isolation = Isolation.READ_COMMITTED)
     public SysCompany update(SysCompany sysCompany) {
-        this.sysCompanyMapper.update(sysCompany);
-        return this.queryById(sysCompany.getId());
+        try {
+            LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            sysCompany.setUpdateDate(timestamp);
+            this.sysCompanyMapper.update(sysCompany);
+            return this.queryById(sysCompany.getId());
+        } catch (Exception e) {
+            throw new ActionException();
+        }
     }
 
     /**

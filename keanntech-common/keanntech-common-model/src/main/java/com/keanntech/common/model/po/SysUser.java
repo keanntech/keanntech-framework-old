@@ -34,6 +34,7 @@ public class SysUser extends BasePO {
   private Boolean admin;
   private Boolean enabled;
   private Long sysCompanyId;
+  private SysCompany sysCompany;
   private Boolean accountNonExpired;
   private Boolean credentialsNonExpired;
   private Boolean accountNonLocked;

@@ -30,13 +30,6 @@
         where id = #{id}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="SysCompanyMap">
-        select
-          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
-        from keanntech_admin.sys_company
-        limit #{offset}, #{limit}
-    </select>
 
     <select id="loadAllCompanies" resultMap="SysCompanyMap">
         select
@@ -53,66 +46,6 @@
         #{areaId}, #{address}, #{remark}, #{createId}, #{updateId}, #{createDate}, #{updateDate}
         )
     </insert>
-
-    <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="SysCompanyMap">
-        select
-          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
-        from keanntech_admin.sys_company
-        <where>
-            <if test="id != null">
-                and id = #{id}
-            </if>
-            <if test="createId != null">
-                and create_id = #{createId}
-            </if>
-            <if test="updateId != null">
-                and update_id = #{updateId}
-            </if>
-            <if test="createDate != null">
-                and create_date = #{createDate}
-            </if>
-            <if test="updateDate != null">
-                and update_date = #{updateDate}
-            </if>
-            <if test="remark != null and remark != ''">
-                and remark = #{remark}
-            </if>
-            <if test="deleted != null">
-                and deleted = #{deleted}
-            </if>
-            <if test="address != null and address != ''">
-                and address = #{address}
-            </if>
-            <if test="areaId != null and areaId != ''">
-                and area_id = #{areaId}
-            </if>
-            <if test="zipCode != null and zipCode != ''">
-                and zip_code = #{zipCode}
-            </if>
-            <if test="master != null and master != ''">
-                and master = #{master}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone = #{phone}
-            </if>
-            <if test="mobile != null and mobile != ''">
-                and mobile = #{mobile}
-            </if>
-            <if test="fax != null and fax != ''">
-                and fax = #{fax}
-            </if>
-            <if test="email != null and email != ''">
-                and email = #{email}
-            </if>
-            <if test="copyright != null and copyright != ''">
-                and copyright = #{copyright}
-            </if>
-            <if test="companyName != null and companyName != ''">
-                and company_name = #{companyName}
-            </if>
-        </where>
-    </select>
 
     <!--通过主键修改数据-->
     <update id="update">

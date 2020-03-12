@@ -26,6 +26,9 @@
         <result column="account_non_expired" property="accountNonExpired"></result>
         <result column="credentials_non_expired" property="credentialsNonExpired"></result>
         <result column="account_non_locked" property="accountNonLocked"></result>
+        <association
+                property="sysCompany" javaType="com.keanntech.common.model.po.SysCompany"
+                column="sys_company_id" select="com.keanntech.provider.admin.mapper.SysCompanyMapper.queryById" />
     </resultMap>
 
     <resultMap id="lazyLoadRoles" type="com.keanntech.common.model.po.SysUser" extends="SysUserResultMap">
@@ -41,7 +44,11 @@
     </select>
 
     <select id="loadAllUsers" resultMap="SysUserResultMap" resultType="java.util.List">
-        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled FROM sys_user u WHERE u.deleted = 0
+        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled, u.sys_company_id FROM sys_user u WHERE u.deleted = 0
+    </select>
+
+    <select id="loadAdmin" resultMap="SysUserResultMap" resultType="java.util.List">
+        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled, u.sys_company_id FROM sys_user u WHERE u.deleted = 0 AND u.admin = 1
     </select>
 
     <select id="getRolesById" resultType="com.keanntech.common.model.po.SysRole">
@@ -51,11 +58,50 @@
 
     <insert id="saveUser">
         INSERT INTO
-        sys_user (id,user_name,password,job_number,name,remark,email,phone,mobile,photo,
-        last_login_date,enabled,create_id,update_id,create_date,update_date)
-        VALUE (#{id},#{userName},#{password},#{jobNumber},#{name},#{remark},#{email},#{phone},#{mobile},#{photo},
-        #{lastLoginDate},#{enabled},#{createId},#{updateId},#{createDate},#{updateDate})
+        sys_user (id,user_name,password,job_number,name,remark,email,phone,mobile,photo,super_admin,admin,sys_company_id,
+        last_login_date,create_id,update_id,create_date,update_date)
+        VALUE (#{id},#{userName},#{password},#{jobNumber},#{name},#{remark},#{email},#{phone},#{mobile},#{photo},#{superAdmin},#{admin},#{sysCompanyId},
+        #{lastLoginDate},#{createId},#{updateId},#{createDate},#{updateDate})
     </insert>
+
+    <update id="updateUser">
+        UPDATE sys_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="jobNumber != null and jobNumber != ''">
+                job_number = #{jobNumber},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="sysCompanyId != null and sysCompanyId != ''">
+                sys_company_id = #{sysCompanyId},
+            </if>
+            <if test="updateId != null">
+                update_id = #{updateId},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
 
 
 </mapper>

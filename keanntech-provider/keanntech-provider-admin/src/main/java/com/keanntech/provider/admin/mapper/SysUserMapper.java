@@ -3,6 +3,7 @@ package com.keanntech.provider.admin.mapper;
 import com.keanntech.common.model.po.SysRole;
 import com.keanntech.common.model.po.SysUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,8 +16,12 @@ public interface SysUserMapper {
 
     List<SysUser> loadAllUsers();
 
-    List<SysRole> getRolesById(Long id);
+    List<SysUser> loadAdmin();
+
+    List<SysRole> getRolesById(Long userId);
 
     int saveUser(SysUser sysUser);
+
+    int updateUser(SysUser sysUser);
 
 }

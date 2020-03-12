@@ -2,12 +2,12 @@ package com.keanntech.provider.admin.controller;
 
 import com.keanntech.common.base.annotation.CurrentUser;
 import com.keanntech.common.base.controller.BaseController;
+import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.base.reponse.ResponseDataUtil;
 import com.keanntech.common.base.reponse.ResultEnums;
 import com.keanntech.common.model.auth.OauthClient;
 import com.keanntech.common.model.methodresolver.CurrentUserResolver;
-import com.keanntech.common.model.po.SysRole;
 import com.keanntech.common.model.po.SysUser;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
 import com.keanntech.provider.admin.service.ISysUserService;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Api("系统用户")
 @RestController
@@ -62,6 +61,13 @@ public class SysUserController extends BaseController {
         return ResponseDataUtil.buildSuccess(sysUserList);
     }
 
+    @GetMapping("/loadAdmin")
+    @ApiOperation(value = "获取公司管理员")
+    public ResponseData<SysUser> loadAdmin(){
+        List<SysUser> sysUserList = sysUserService.loadAdmin();
+        return ResponseDataUtil.buildSuccess(sysUserList);
+    }
+
     @PostMapping("/saveUser")
     @ApiOperation(value = "保存用户")
     @ApiImplicitParams({
@@ -69,29 +75,50 @@ public class SysUserController extends BaseController {
     })
     public ResponseData<SysUser> saveUser(
             @NotNull(message = "用户信息不能为空！") @RequestBody SysUser sysUser, @CurrentUser CurrentUserResolver currentUser) {
-        //验证用户名、工号是否重复
-        SysUser user = sysUserService.loadUserByUserName(sysUser.getUserName());
-        if(!Objects.isNull(user)){
-            return ResponseDataUtil.buildError("用户[" + sysUser.getUserName() + "]已存在！");
-        }
-        user = sysUserService.laoadUserByJobNumber(sysUser.getJobNumber());
-        if(!Objects.isNull(user)){
-            return ResponseDataUtil.buildError("工号[" + sysUser.getJobNumber() + "]已存在！");
-        }
-        sysUser.setCreateId(currentUser.getId());
-        sysUser.setUpdateId(currentUser.getId());
+        try {
+            //验证用户名、工号是否重复
+            SysUser user = sysUserService.loadUserByUserName(sysUser.getUserName());
+            if(!Objects.isNull(user)){
+                return ResponseDataUtil.buildError("用户[" + sysUser.getUserName() + "]已存在！");
+            }
+            user = sysUserService.loadUserByJobNumber(sysUser.getJobNumber());
+            if(!Objects.isNull(user)){
+                return ResponseDataUtil.buildError("工号[" + sysUser.getJobNumber() + "]已存在！");
+            }
+            sysUser.setCreateId(currentUser.getId());
+            sysUser.setUpdateId(currentUser.getId());
 
-        //保存用户信息
-        boolean isCreated = sysUserService.createUser(sysUser, new OauthClient());
-        if(isCreated){
-            //获取角色
-            List<SysRole> sysRoles = sysUser.getUserRoles();
-            List<Long> roleIds = sysRoles.stream().map(SysRole::getId).collect(Collectors.toList());
-            sysUserRoleRelationService.batchInsert(sysUser.getId(), roleIds);
+            //保存用户信息
+            sysUserService.createUser(sysUser, new OauthClient());
 
-            return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"添加成功！",sysUser);
+            return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"添加成功！",sysUserService.loadUserByUserName(sysUser.getUserName()));
+        } catch (ActionException e) {
+            return ResponseDataUtil.buildError("添加失败！");
         }
-        return ResponseDataUtil.buildError("添加失败！");
+
+
+    }
+
+
+    @PostMapping("/updateUser")
+    public ResponseData<SysUser> updateUser(
+            @NotNull(message = "用户信息不能为空") @RequestBody SysUser sysUser, @CurrentUser CurrentUserResolver currentUserResolver){
+        try {
+            //验证用户名、工号是否重复
+            SysUser user = sysUserService.loadUserByUserName(sysUser.getUserName());
+            if(!Objects.isNull(user) && user.getId().longValue() != sysUser.getId().longValue()){
+                return ResponseDataUtil.buildError("用户[" + sysUser.getUserName() + "]已存在！");
+            }
+            user = sysUserService.loadUserByJobNumber(sysUser.getJobNumber());
+            if(!Objects.isNull(user) && user.getId().longValue() != sysUser.getId().longValue()){
+                return ResponseDataUtil.buildError("工号[" + sysUser.getJobNumber() + "]已存在！");
+            }
+            sysUser.setUpdateId(currentUserResolver.getId());
+            sysUserService.updateUser(sysUser);
+            return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"修改成功！",sysUser);
+        } catch (ActionException e) {
+            return ResponseDataUtil.buildError("修改失败！");
+        }
     }
 
 }

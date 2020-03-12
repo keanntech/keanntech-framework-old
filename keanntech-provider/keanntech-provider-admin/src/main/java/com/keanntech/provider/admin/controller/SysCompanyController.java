@@ -47,6 +47,10 @@ public class SysCompanyController {
         return ResponseDataUtil.buildSuccess(sysCompany);
     }
 
+    /**
+     * 加载所有公司信息
+     * @return
+     */
     @GetMapping("/loadAllCompanies")
     @ApiOperation(value = "加载所有公司")
     public ResponseData<SysCompany> loadAllCompanies(){
@@ -54,6 +58,12 @@ public class SysCompanyController {
         return ResponseDataUtil.buildSuccess(companyList);
     }
 
+    /**
+     * 保存公司信息
+     * @param sysCompany
+     * @param currentUser 当前登录用户
+     * @return
+     */
     @PostMapping("/saveCompany")
     @ApiImplicitParam(name = "sysCompany", value = "公司信息对象", required = true, paramType = "body", dataType = "SysCompany")
     public ResponseData<SysCompany> saveCompany(
@@ -62,17 +72,26 @@ public class SysCompanyController {
         sysCompany.setCreateId(currentUser.getId());
         sysCompany.setUpdateId(currentUser.getId());
 
-        int intResult = 0;
         try {
-            intResult = sysCompanyService.saveCompany(sysCompany);
-            if(intResult > 0){
-                return ResponseDataUtil.buildSuccess(sysCompany);
-            }
+            sysCompanyService.saveCompany(sysCompany);
+            return ResponseDataUtil.buildSuccess(sysCompany);
         } catch (ActionException e) {
             return ResponseDataUtil.buildError("保存失败！");
         }
+    }
 
-        return ResponseDataUtil.buildError("保存失败！");
+    @PostMapping("/updateCompany")
+    public ResponseData<SysCompany> updateCompany(
+            @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser){
+
+        sysCompany.setUpdateId(currentUser.getId());
+        try {
+            sysCompanyService.update(sysCompany);
+            return ResponseDataUtil.buildSuccess(sysCompany);
+        } catch (ActionException e) {
+            return ResponseDataUtil.buildError("更新失败！");
+        }
+
     }
 
 }
