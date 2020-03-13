@@ -42,6 +42,7 @@ public class CurrentUserHandlerMethodArgumentResolver implements HandlerMethodAr
         currentUser.setName(String.valueOf(claims.get("name")));
         currentUser.setRoleIds((List)claims.get("roleIds"));
         currentUser.setUserName(String.valueOf(claims.get("userName")));
+        currentUser.setSysCompanyId(Long.valueOf(String.valueOf(claims.get("sysCompanyId"))));
         return currentUser;
     }
 }

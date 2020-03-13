@@ -56,8 +56,8 @@ public class SysUserController extends BaseController {
 
     @GetMapping("/loadAllUsers")
     @ApiOperation(value = "获取所有用户")
-    public ResponseData<SysUser> loadAllUsers(){
-        List<SysUser> sysUserList = sysUserService.loadAllUsers();
+    public ResponseData<SysUser> loadAllUsers(@CurrentUser CurrentUserResolver currentUserResolver){
+        List<SysUser> sysUserList = sysUserService.loadAllUsers(currentUserResolver.getSysCompanyId());
         return ResponseDataUtil.buildSuccess(sysUserList);
     }
 
@@ -87,9 +87,10 @@ public class SysUserController extends BaseController {
             }
             sysUser.setCreateId(currentUser.getId());
             sysUser.setUpdateId(currentUser.getId());
+            sysUser.setSysCompanyId(currentUser.getSysCompanyId());
 
             //保存用户信息
-            sysUserService.createUser(sysUser, new OauthClient());
+            sysUserService.createUser(sysUser);
 
             return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"添加成功！",sysUserService.loadUserByUserName(sysUser.getUserName()));
         } catch (ActionException e) {
@@ -101,6 +102,10 @@ public class SysUserController extends BaseController {
 
 
     @PostMapping("/updateUser")
+    @ApiOperation(value = "更新用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sysUser", value = "用户信息", required = true)
+    })
     public ResponseData<SysUser> updateUser(
             @NotNull(message = "用户信息不能为空") @RequestBody SysUser sysUser, @CurrentUser CurrentUserResolver currentUserResolver){
         try {
@@ -118,6 +123,16 @@ public class SysUserController extends BaseController {
             return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"修改成功！",sysUser);
         } catch (ActionException e) {
             return ResponseDataUtil.buildError("修改失败！");
+        }
+    }
+
+    @GetMapping("/resetPassword")
+    public ResponseData resetPassword(@NotNull(message = "用户名不能为空") @RequestParam("userName") String userName){
+        try {
+            sysUserService.resetPassword(userName);
+            return ResponseDataUtil.buildSuccess("更新成功！");
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError("更新失败！");
         }
     }
 

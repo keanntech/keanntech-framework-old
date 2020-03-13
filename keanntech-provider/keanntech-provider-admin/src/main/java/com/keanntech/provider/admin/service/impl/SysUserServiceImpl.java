@@ -2,7 +2,6 @@ package com.keanntech.provider.admin.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import com.baidu.fsg.uid.impl.CachedUidGenerator;
-import com.keanntech.common.base.constants.GlobalsConstants;
 import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.base.utils.BCryptPwEncoder;
 import com.keanntech.common.model.auth.OauthClient;
@@ -15,7 +14,6 @@ import com.keanntech.provider.api.auth.OauthClientApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
@@ -24,7 +22,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service("sysUserService")
@@ -69,8 +66,8 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
-    public List<SysUser> loadAllUsers() {
-        return sysUserMapper.loadAllUsers();
+    public List<SysUser> loadAllUsers(Long companyId) {
+        return sysUserMapper.loadAllUsers(companyId);
     }
 
     @Override
@@ -79,8 +76,8 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = ActionException.class, isolation = Isolation.READ_COMMITTED)
-    public boolean createUser(SysUser sysUser, OauthClient oauthClient) {
+    @Transactional(rollbackFor = ActionException.class)
+    public boolean createUser(SysUser sysUser) {
 
         BCryptPwEncoder bCryptPwEncoder = new BCryptPwEncoder();
 
@@ -101,6 +98,7 @@ public class SysUserServiceImpl implements ISysUserService {
                 sysUserRoleRelationService.batchInsert(sysUser.getId(), roleIds);
             }
 
+            OauthClient oauthClient = new OauthClient();
             oauthClient.setClientId(sysUser.getUserName());
             oauthClient.setClientSecret(sysUser.getPassword());
             oauthClientApi.createClient(oauthClient);
@@ -114,7 +112,7 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = ActionException.class, isolation = Isolation.READ_COMMITTED)
+    @Transactional(rollbackFor = ActionException.class)
     public boolean updateUser(SysUser sysUser) {
         try {
             LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
@@ -125,5 +123,20 @@ public class SysUserServiceImpl implements ISysUserService {
             throw new ActionException();
         }
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = ActionException.class)
+    public boolean resetPassword(String userName) {
+        try {
+            BCryptPwEncoder bCryptPwEncoder = new BCryptPwEncoder();
+            SysUser sysUser = this.loadUserByUserName(userName);
+            String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()));
+            sysUserMapper.resetPassword(pw, userName);
+            oauthClientApi.resetClientSecret(pw, userName);
+            return true;
+        } catch (Exception e) {
+            throw new ActionException();
+        }
     }
 }

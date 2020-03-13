@@ -14,5 +14,6 @@ public class CurrentUserResolver {
     private String name;
     private List<Long> roleIds;
     private String jobNumber;
+    private Long sysCompanyId;
 
 }

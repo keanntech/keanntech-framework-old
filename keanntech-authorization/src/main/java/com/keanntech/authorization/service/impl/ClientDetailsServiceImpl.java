@@ -33,4 +33,11 @@ public class ClientDetailsServiceImpl implements IClientDetailsService {
     public int insertClient(OauthClient oauthClient) {
         return authMapper.insert(oauthClient);
     }
+
+    @Override
+    public int resetClientSecret(String secret, String clientId) {
+        return authMapper.resetClientSecret(secret, clientId);
+    }
+
+
 }

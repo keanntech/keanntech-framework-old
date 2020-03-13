@@ -39,12 +39,13 @@
         SELECT * from sys_user WHERE user_name = #{userName} AND deleted = 0
     </select>
 
-    <select id="loadUserByJobNumber" resultMap="SysUserResultMap">
+    <select id="loadUserByJobNumber" resultMap="lazyLoadRoles">
         SELECT * from sys_user WHERE job_number = #{jobNumber} AND deleted = 0
     </select>
 
     <select id="loadAllUsers" resultMap="SysUserResultMap" resultType="java.util.List">
-        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled, u.sys_company_id FROM sys_user u WHERE u.deleted = 0
+        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled, u.sys_company_id
+        FROM sys_user u WHERE u.deleted = 0 AND u.super_admin = 0 AND u.admin = 0 AND u.sys_company_id = #{companyId}
     </select>
 
     <select id="loadAdmin" resultMap="SysUserResultMap" resultType="java.util.List">
@@ -99,6 +100,16 @@
             </if>
         </set>
         WHERE id = #{id}
+    </update>
+
+    <update id="resetPassword">
+        UPDATE sys_user
+        <set>
+            <if test="passWord != null and passWord != ''">
+                password = #{passWord}
+            </if>
+        </set>
+        WHERE user_name = #{userName}
     </update>
 
 

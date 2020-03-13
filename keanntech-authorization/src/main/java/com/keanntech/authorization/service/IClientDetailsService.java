@@ -7,4 +7,6 @@ public interface IClientDetailsService extends ClientDetailsService {
 
     int insertClient(OauthClient oauthClient);
 
+    int resetClientSecret(String secret, String clientId);
+
 }

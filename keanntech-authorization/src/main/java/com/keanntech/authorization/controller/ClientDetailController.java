@@ -27,4 +27,9 @@ public class ClientDetailController {
         return clientDetailsService.insertClient(oauthClient);
     }
 
+    @GetMapping("/resetClientSecret")
+    int resetClientSecret(@RequestParam("secret") String secret, @RequestParam("clientId") String clientId){
+        return clientDetailsService.resetClientSecret(secret, clientId);
+    }
+
 }

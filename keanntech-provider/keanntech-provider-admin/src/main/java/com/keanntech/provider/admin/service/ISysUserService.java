@@ -11,11 +11,13 @@ public interface ISysUserService {
 
     SysUser loadUserByJobNumber(String jobNumber);
 
-    List<SysUser> loadAllUsers();
+    List<SysUser> loadAllUsers(Long companyId);
     List<SysUser> loadAdmin();
 
-    boolean createUser(SysUser sysUser, OauthClient oauthClient);
+    boolean createUser(SysUser sysUser);
 
     boolean updateUser(SysUser sysUser);
+
+    boolean resetPassword(String userName);
 
 }
