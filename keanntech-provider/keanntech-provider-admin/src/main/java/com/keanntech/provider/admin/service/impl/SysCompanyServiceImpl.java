@@ -9,7 +9,6 @@ import com.keanntech.provider.admin.service.ISysCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -68,7 +67,7 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = {ActionException.class}, isolation = Isolation.READ_COMMITTED)
+    @Transactional(rollbackFor = {ActionException.class})
     public int saveCompany(SysCompany sysCompany) {
         try{
             LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
@@ -89,7 +88,7 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
      * @return 实例对象
      */
     @Override
-    @Transactional(rollbackFor = ActionException.class, isolation = Isolation.READ_COMMITTED)
+    @Transactional(rollbackFor = ActionException.class)
     public SysCompany update(SysCompany sysCompany) {
         try {
             LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
