@@ -1,6 +1,8 @@
 package com.keanntech.provider.admin.service.impl;
 
+import com.keanntech.common.model.po.SysUser;
 import com.keanntech.common.model.po.SysUserRoleRelation;
+import com.keanntech.provider.admin.mapper.SysUserMapper;
 import com.keanntech.provider.admin.mapper.SysUserRoleRelationMapper;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,16 @@ import java.util.List;
 public class SysUserRoleRelationServiceImpl implements ISysUserRoleRelationService {
 
     private SysUserRoleRelationMapper sysUserRoleRelationMapper;
+    private SysUserMapper sysUserMapper;
 
     @Autowired
     public void setSysUserRoleRelationMapper(SysUserRoleRelationMapper sysUserRoleRelationMapper) {
         this.sysUserRoleRelationMapper = sysUserRoleRelationMapper;
+    }
+
+    @Autowired
+    public void setSysUserMapper(SysUserMapper sysUserMapper){
+        this.sysUserMapper = sysUserMapper;
     }
 
     /**
@@ -34,6 +42,11 @@ public class SysUserRoleRelationServiceImpl implements ISysUserRoleRelationServi
     @Override
     public SysUserRoleRelation queryById(Long sysUserId) {
         return this.sysUserRoleRelationMapper.queryById(sysUserId);
+    }
+
+    @Override
+    public List<SysUserRoleRelation> loadRoleIdsByUserId(Long userId) {
+        return sysUserRoleRelationMapper.loadRoleIdsByUserId(userId);
     }
 
     /**
@@ -93,5 +106,10 @@ public class SysUserRoleRelationServiceImpl implements ISysUserRoleRelationServi
     @Override
     public boolean deleteById(Long sysUserId) {
         return this.sysUserRoleRelationMapper.deleteById(sysUserId) > 0;
+    }
+
+    @Override
+    public boolean deleteByUserId(Long sysUserId) {
+        return this.sysUserRoleRelationMapper.deleteByUserId(sysUserId) > 0;
     }
 }

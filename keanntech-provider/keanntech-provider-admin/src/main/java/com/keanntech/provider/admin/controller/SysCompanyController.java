@@ -4,6 +4,7 @@ import com.keanntech.common.base.annotation.CurrentUser;
 import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.base.reponse.ResponseDataUtil;
+import com.keanntech.common.base.reponse.ResultEnums;
 import com.keanntech.common.model.methodresolver.CurrentUserResolver;
 import com.keanntech.common.model.po.SysCompany;
 import com.keanntech.provider.admin.service.ISysCompanyService;
@@ -44,7 +45,7 @@ public class SysCompanyController {
     @ApiImplicitParam(name = "id", value = "公司ID", required = true, paramType = "path", dataType = "Long")
     public ResponseData<SysCompany> selectOne(Long id) {
         SysCompany sysCompany = this.sysCompanyService.queryById(id);
-        return ResponseDataUtil.buildSuccess(sysCompany);
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysCompany);
     }
 
     /**
@@ -55,7 +56,7 @@ public class SysCompanyController {
     @ApiOperation(value = "加载所有公司")
     public ResponseData<SysCompany> loadAllCompanies(){
         List<SysCompany> companyList = sysCompanyService.loadAllCompanies();
-        return ResponseDataUtil.buildSuccess(companyList);
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", companyList);
     }
 
     /**

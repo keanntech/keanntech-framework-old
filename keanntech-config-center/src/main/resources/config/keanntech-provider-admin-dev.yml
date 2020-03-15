@@ -57,6 +57,14 @@ mybatis-plus:
       logic-not-delete-value: 1
       logic-delete-value: 0
 
+pagehelper:
+  helper-dialect: mysql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  reasonable: true
+  supportMethodsArguments: true
+  pageSizeZero: true
+
 ignore:
   authUrls:
     - /oauth/**

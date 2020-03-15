@@ -55,7 +55,7 @@ public class SysMenuController {
             return ResponseDataUtil.buildError(ResultEnums.MENU_EMPTY.getCode(),"未分配角色，无法获取菜单");
         }
         JSONArray jsonMenus = sysMenuService.createMenuTree(sysMenus);
-        return ResponseDataUtil.buildSuccess(jsonMenus);
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", jsonMenus);
     }
 
 

@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>keanntech-common-uidgenerator</module>
+        <module>keanntech-common-base</module>
+        <module>keanntech-common-model</module>
     </modules>
 
 

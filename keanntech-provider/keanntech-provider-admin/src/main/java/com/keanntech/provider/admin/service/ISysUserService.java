@@ -1,5 +1,6 @@
 package com.keanntech.provider.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.keanntech.common.model.auth.OauthClient;
 import com.keanntech.common.model.po.SysUser;
 
@@ -11,12 +12,14 @@ public interface ISysUserService {
 
     SysUser loadUserByJobNumber(String jobNumber);
 
-    List<SysUser> loadAllUsers(Long companyId);
+    PageInfo<SysUser> loadAllUsers(SysUser sysUser, int curtPage, int pageSize, Long companyId);
     List<SysUser> loadAdmin();
 
     boolean createUser(SysUser sysUser);
 
     boolean updateUser(SysUser sysUser);
+
+    boolean updateEnabled(int enabled, String userName);
 
     boolean resetPassword(String userName);
 

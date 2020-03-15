@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.keanntech.provider.admin.mapper.SysUserMapper">
     <resultMap id="SysUserResultMap" type="com.keanntech.common.model.po.SysUser">
-        <id column="id" property="id"></id>
-        <result column="create_id" property="createId"></result>
-        <result column="update_id" property="updateId"></result>
-        <result column="create_date" property="createDate"></result>
-        <result column="update_date" property="updateDate"></result>
+        <id column="id" property="id" javaType="Long"></id>
+        <result column="create_id" property="createId" javaType="Long"></result>
+        <result column="update_id" property="updateId" javaType="Long"></result>
+        <result column="create_date" property="createDate" javaType="java.sql.Timestamp"></result>
+        <result column="update_date" property="updateDate" javaType="java.sql.Timestamp"></result>
         <result column="last_login_date" property="lastLoginDate" javaType="java.sql.Timestamp"></result>
         <result column="remark" property="remark"></result>
         <result column="deleted" property="deleted"></result>
@@ -46,6 +46,15 @@
     <select id="loadAllUsers" resultMap="SysUserResultMap" resultType="java.util.List">
         SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled, u.sys_company_id
         FROM sys_user u WHERE u.deleted = 0 AND u.super_admin = 0 AND u.admin = 0 AND u.sys_company_id = #{companyId}
+        <if test="sysUser.userName != null and sysUser.userName != ''">
+            AND user_name LIKE concat(concat('%',#{sysUser.userName}),'%')
+        </if>
+        <if test="sysUser.name != null and sysUser.name != ''">
+            AND name LIKE concat(concat('%',#{sysUser.name}),'%')
+        </if>
+        <if test="sysUser.jobNumber != null and sysUser.jobNumber != ''">
+            AND job_number = #{sysUser.jobNumber,jdbcType=VARCHAR}
+        </if>
     </select>
 
     <select id="loadAdmin" resultMap="SysUserResultMap" resultType="java.util.List">
@@ -107,6 +116,16 @@
         <set>
             <if test="passWord != null and passWord != ''">
                 password = #{passWord}
+            </if>
+        </set>
+        WHERE user_name = #{userName}
+    </update>
+
+    <update id="updateEnabled">
+        UPDATE sys_user
+        <set>
+            <if test="enabled != null">
+                enabled = #{enabled}
             </if>
         </set>
         WHERE user_name = #{userName}

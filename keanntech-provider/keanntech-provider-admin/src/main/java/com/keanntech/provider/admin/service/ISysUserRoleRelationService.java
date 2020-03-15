@@ -20,6 +20,8 @@ public interface ISysUserRoleRelationService {
      */
     SysUserRoleRelation queryById(Long sysUserId);
 
+    List<SysUserRoleRelation> loadRoleIdsByUserId(Long userId);
+
     /**
      * 查询多条数据
      *
@@ -54,5 +56,7 @@ public interface ISysUserRoleRelationService {
      * @return 是否成功
      */
     boolean deleteById(Long sysUserId);
+
+    boolean deleteByUserId(Long sysUserId);
 
 }

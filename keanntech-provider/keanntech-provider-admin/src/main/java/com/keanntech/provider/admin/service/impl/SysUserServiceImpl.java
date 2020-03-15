@@ -2,6 +2,8 @@ package com.keanntech.provider.admin.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import com.baidu.fsg.uid.impl.CachedUidGenerator;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.base.utils.BCryptPwEncoder;
 import com.keanntech.common.model.auth.OauthClient;
@@ -66,8 +68,11 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
-    public List<SysUser> loadAllUsers(Long companyId) {
-        return sysUserMapper.loadAllUsers(companyId);
+    public PageInfo<SysUser> loadAllUsers(SysUser sysUser, int curtPage, int pageSize, Long companyId) {
+        PageHelper.startPage(curtPage, pageSize);
+        List<SysUser> sysUsers = sysUserMapper.loadAllUsers(sysUser, companyId);
+        PageInfo<SysUser> pageInfo = new PageInfo<>(sysUsers);
+        return pageInfo;
     }
 
     @Override
@@ -119,10 +124,26 @@ public class SysUserServiceImpl implements ISysUserService {
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             sysUser.setUpdateDate(timestamp);
             sysUserMapper.updateUser(sysUser);
+            List<SysRole> sysRoles = sysUser.getUserRoles();
+            if(!CollectionUtils.isEmpty(sysRoles) && sysRoles.size() > 0) {
+                this.sysUserRoleRelationService.deleteByUserId(sysUser.getId());
+                List<Long> roleIds = sysRoles.stream().map(SysRole::getId).collect(Collectors.toList());
+                sysUserRoleRelationService.batchInsert(sysUser.getId(), roleIds);
+            }
         } catch (ActionException e) {
             throw new ActionException();
         }
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = ActionException.class)
+    public boolean updateEnabled(int enabled, String userName) {
+        try {
+            return sysUserMapper.updateEnabled(enabled, userName) > 0;
+        } catch (Exception e) {
+            throw new ActionException();
+        }
     }
 
     @Override

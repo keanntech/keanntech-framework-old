@@ -39,6 +39,12 @@
             <groupId>com.keanntech.framework</groupId>
             <artifactId>keanntech-common-base</artifactId>
             <version>${keanntech-common-base.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bcpkix-jdk15on</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.keanntech.framework</groupId>

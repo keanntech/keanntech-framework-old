@@ -38,6 +38,13 @@
         </where>
     </select>
 
+    <select id="loadRoleIdsByUserId" resultMap="SysUserRoleRelationMap">
+        select
+        sys_user_id, sys_role_id
+        from keanntech_admin.sys_user_role_relation
+        where sys_user_id = #{userId}
+    </select>
+
     <!--新增所有列-->
     <insert id="insert">
         insert into keanntech_admin.sys_user_role_relation(sys_user_id,sys_role_id)
@@ -62,6 +69,10 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
+        delete from keanntech_admin.sys_user_role_relation where sys_user_id = #{sysUserId}
+    </delete>
+
+    <delete id="deleteByUserId">
         delete from keanntech_admin.sys_user_role_relation where sys_user_id = #{sysUserId}
     </delete>
 

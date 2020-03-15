@@ -46,6 +46,7 @@
         <keanntech-common-base.version>1.0-SNAPSHOT</keanntech-common-base.version>
         <keanntech-common-uidgenerator.version>1.0-SNAPSHOT</keanntech-common-uidgenerator.version>
         <keanntech-provider-api.version>1.0-SNAPSHOT</keanntech-provider-api.version>
+        <pagehelper-starter.version>1.2.13</pagehelper-starter.version>
     </properties>
 
     <dependencies>

@@ -15,9 +15,4 @@ public final class GlobalsConstants {
     public static final String CACHE_NAME_AUTH = "keanntech-authorization";
     public static final String CACHE_NAME_TOKEN_SERIALIZER = "token-serializer";
 
-    /**
-     * 初始密码
-     */
-    public static final String USER_INITIAL_PASSWORD = "123456";
-
 }

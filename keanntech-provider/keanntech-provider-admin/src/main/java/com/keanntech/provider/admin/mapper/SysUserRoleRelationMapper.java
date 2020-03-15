@@ -39,6 +39,8 @@ public interface SysUserRoleRelationMapper {
      */
     List<SysUserRoleRelation> queryAll(SysUserRoleRelation sysUserRoleRelation);
 
+    List<SysUserRoleRelation> loadRoleIdsByUserId(Long userId);
+
     /**
      * 新增数据
      *
@@ -68,5 +70,12 @@ public interface SysUserRoleRelationMapper {
      * @return 影响行数
      */
     int deleteById(Long sysUserId);
+
+    /**
+     * 根据用户ID删除对应权限
+     * @param sysUserId
+     * @return
+     */
+    int deleteByUserId(Long sysUserId);
 
 }

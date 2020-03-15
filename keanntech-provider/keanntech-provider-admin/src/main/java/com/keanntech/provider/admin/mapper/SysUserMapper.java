@@ -14,7 +14,7 @@ public interface SysUserMapper {
 
     SysUser loadUserByJobNumber(String jobNumber);
 
-    List<SysUser> loadAllUsers(Long companyId);
+    List<SysUser> loadAllUsers(@Param("sysUser") SysUser sysUser, @Param("companyId") Long companyId);
 
     List<SysUser> loadAdmin();
 
@@ -23,6 +23,8 @@ public interface SysUserMapper {
     int saveUser(SysUser sysUser);
 
     int updateUser(SysUser sysUser);
+
+    int  updateEnabled(@Param("enabled") int enabled, @Param("userName") String userName);
 
     int resetPassword(@Param("passWord") String passWord, @Param("userName") String userName);
 

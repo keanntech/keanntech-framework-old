@@ -1,5 +1,6 @@
 package com.keanntech.provider.admin.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.keanntech.common.base.annotation.CurrentUser;
 import com.keanntech.common.base.controller.BaseController;
 import com.keanntech.common.base.exception.ActionException;
@@ -9,6 +10,7 @@ import com.keanntech.common.base.reponse.ResultEnums;
 import com.keanntech.common.model.auth.OauthClient;
 import com.keanntech.common.model.methodresolver.CurrentUserResolver;
 import com.keanntech.common.model.po.SysUser;
+import com.keanntech.common.model.po.SysUserRoleRelation;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
 import com.keanntech.provider.admin.service.ISysUserService;
 import io.swagger.annotations.Api;
@@ -16,11 +18,14 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Api("系统用户")
 @RestController
@@ -51,21 +56,25 @@ public class SysUserController extends BaseController {
             return ResponseDataUtil.buildError(ResultEnums.USER_NOT_EXIST.getCode(), "用户" + userName + "不存在！");
         }
         sysUser.setPassword("");
-        return ResponseDataUtil.buildSuccess(sysUser);
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysUser);
     }
 
-    @GetMapping("/loadAllUsers")
-    @ApiOperation(value = "获取所有用户")
-    public ResponseData<SysUser> loadAllUsers(@CurrentUser CurrentUserResolver currentUserResolver){
-        List<SysUser> sysUserList = sysUserService.loadAllUsers(currentUserResolver.getSysCompanyId());
-        return ResponseDataUtil.buildSuccess(sysUserList);
+    @PostMapping("/loadAllUsers")
+    @ApiOperation(value = "分页获取所有用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "curtPage", value = "当前页", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", paramType = "query")
+    })
+    public ResponseData<SysUser> loadAllUsers(@RequestBody SysUser sysUser, @RequestParam("curtPage") int curtPage, @RequestParam("pageSize") int pageSize, @CurrentUser CurrentUserResolver currentUserResolver){
+        PageInfo<SysUser> sysUserList = sysUserService.loadAllUsers(sysUser, curtPage, pageSize, currentUserResolver.getSysCompanyId());
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysUserList);
     }
 
     @GetMapping("/loadAdmin")
     @ApiOperation(value = "获取公司管理员")
     public ResponseData<SysUser> loadAdmin(){
         List<SysUser> sysUserList = sysUserService.loadAdmin();
-        return ResponseDataUtil.buildSuccess(sysUserList);
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysUserList);
     }
 
     @PostMapping("/saveUser")
@@ -127,11 +136,36 @@ public class SysUserController extends BaseController {
     }
 
     @GetMapping("/resetPassword")
+    @ApiOperation(value = "重置密码")
+    @ApiImplicitParam(name = "userName", value = "用户名", required = true, paramType = "query")
     public ResponseData resetPassword(@NotNull(message = "用户名不能为空") @RequestParam("userName") String userName){
         try {
             sysUserService.resetPassword(userName);
             return ResponseDataUtil.buildSuccess("更新成功！");
-        } catch (Exception e) {
+        } catch (ActionException e) {
+            return ResponseDataUtil.buildError("更新失败！");
+        }
+    }
+
+    @GetMapping("/loadRoleIdsByUserName")
+    @ApiOperation(value = "获取用户对应的角色ID")
+    @ApiImplicitParam(name = "userId", value = "用户 ID", required = true, paramType = "query")
+    public ResponseData<List<Long>> loadRoleIdsByUserName(@NotNull(message = "用户名不能为空") @RequestParam("userId") Long userId){
+        List<SysUserRoleRelation> sysUserRoleRelations = sysUserRoleRelationService.loadRoleIdsByUserId(userId);
+        List<Long> roleIds = Collections.emptyList();
+        if(!CollectionUtils.isEmpty(sysUserRoleRelations) && sysUserRoleRelations.size() > 0){
+            roleIds = sysUserRoleRelations.stream().map(SysUserRoleRelation::getSysRoleId).collect(Collectors.toList());
+        }
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", roleIds);
+    }
+
+    @GetMapping("/updateEnabled")
+    @ApiOperation(value = "禁用/启用 用户")
+    public ResponseData updateEnabled(@RequestParam("enabled") int enabled, @RequestParam("userName") String userName){
+        try {
+            sysUserService.updateEnabled(enabled, userName);
+            return ResponseDataUtil.buildSuccess("更新成功！");
+        } catch (ActionException e){
             return ResponseDataUtil.buildError("更新失败！");
         }
     }
