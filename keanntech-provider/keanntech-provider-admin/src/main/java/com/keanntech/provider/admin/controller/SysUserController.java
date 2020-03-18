@@ -129,7 +129,7 @@ public class SysUserController extends BaseController {
             }
             sysUser.setUpdateId(currentUserResolver.getId());
             sysUserService.updateUser(sysUser);
-            return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"修改成功！",sysUser);
+            return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"修改成功！",sysUserService.loadUserByUserName(sysUser.getUserName()));
         } catch (ActionException e) {
             return ResponseDataUtil.buildError("修改失败！");
         }

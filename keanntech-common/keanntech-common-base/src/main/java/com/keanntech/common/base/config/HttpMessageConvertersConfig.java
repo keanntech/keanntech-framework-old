@@ -20,6 +20,7 @@ public class HttpMessageConvertersConfig extends MappingJackson2HttpMessageConve
 
     public HttpMessageConvertersConfig(){
         List<MediaType> mediaTypes = new ArrayList<>();
+        mediaTypes.add(MediaType.parseMediaType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"));
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"));
         setSupportedMediaTypes(mediaTypes);
     }
