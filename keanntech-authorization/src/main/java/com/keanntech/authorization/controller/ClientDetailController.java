@@ -1,8 +1,7 @@
 package com.keanntech.authorization.controller;
 
 import com.keanntech.authorization.service.IClientDetailsService;
-import com.keanntech.common.base.reponse.ResponseData;
-import com.keanntech.common.base.reponse.ResponseDataUtil;
+import com.keanntech.common.base.utils.BCryptPwEncoder;
 import com.keanntech.common.model.auth.OauthClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,7 +30,9 @@ public class ClientDetailController {
 
     @GetMapping("/resetClientSecret")
     public int resetClientSecret(@RequestParam("secret") String secret, @RequestParam("clientId") String clientId){
-        int intResult = clientDetailsService.resetClientSecret(secret, clientId);
+        BCryptPwEncoder bCryptPwEncoder = new BCryptPwEncoder();
+        String pw = bCryptPwEncoder.encode(secret);
+        int intResult = clientDetailsService.resetClientSecret(pw, clientId);
         return intResult;
     }
 

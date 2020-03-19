@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 系统菜单sys_menu, 资源树，按钮(SysMenu)表数据库访问层
  *
- * @author makejava
+ * @author eddey.miao
  * @since 2020-02-13 20:03:00
  */
 @Mapper
@@ -27,6 +27,13 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenu> loadAllSysMenus();
+
+    /**
+     * 根据父ID查询所有菜单
+     * @param parentId
+     * @return
+     */
+    List<SysMenu> loadMenusByParentId(Long parentId);
 
     /**
      * 通过ID查询单条数据

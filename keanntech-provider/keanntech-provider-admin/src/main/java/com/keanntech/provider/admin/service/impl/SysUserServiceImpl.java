@@ -154,7 +154,7 @@ public class SysUserServiceImpl implements ISysUserService {
             SysUser sysUser = this.loadUserByUserName(userName);
             String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()));
             sysUserMapper.resetPassword(pw, userName);
-            oauthClientApi.resetClientSecret(pw, userName);
+            oauthClientApi.resetClientSecret(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()), userName);
             return true;
         } catch (Exception e) {
             throw new ActionException();

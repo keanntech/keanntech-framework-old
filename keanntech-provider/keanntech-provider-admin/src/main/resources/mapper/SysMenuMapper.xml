@@ -37,6 +37,11 @@
         SELECT * FROM sys_menu
     </select>
 
+    <!--根据父ID查询-->
+    <select id="loadMenusByParentId" resultMap="SysMenuMap">
+        SELECT * FROM sys_menu WHERE parent_id = #{parentId} ORDER BY sort ASC
+    </select>
+
     <!--查询单个-->
     <select id="queryById" resultMap="SysMenuMap">
         select

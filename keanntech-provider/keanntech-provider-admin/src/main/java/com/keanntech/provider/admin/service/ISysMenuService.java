@@ -20,7 +20,18 @@ public interface ISysMenuService {
      */
     List<SysMenu> loadSysMenus(List<Long> roleIds);
 
+    /**
+     * 查询所有菜单
+     * @return
+     */
     List<SysMenu> loadAllSysMenus();
+
+    /**
+     * 根据父ID查询所有菜单
+     * @param parentId
+     * @return
+     */
+    List<SysMenu> loadMenusByParentId(Long parentId);
 
     /**
      * 创建菜单树

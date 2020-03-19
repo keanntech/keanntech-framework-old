@@ -43,6 +43,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
         return sysMenuMapper.loadAllSysMenus();
     }
 
+    @Override
+    public List<SysMenu> loadMenusByParentId(Long parentId) {
+        return sysMenuMapper.loadMenusByParentId(parentId);
+    }
+
     /**
      * 创建菜单树
      * @param sysMenus

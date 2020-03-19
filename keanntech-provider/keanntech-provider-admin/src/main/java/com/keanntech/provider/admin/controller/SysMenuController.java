@@ -10,10 +10,10 @@ import com.keanntech.provider.admin.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,6 +56,12 @@ public class SysMenuController {
         }
         JSONArray jsonMenus = sysMenuService.createMenuTree(sysMenus);
         return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", jsonMenus);
+    }
+
+    @GetMapping("/loadMenuByParentId")
+    public ResponseData<SysMenu> loadMenuByParentId(@NotNull(message = "父ID不能为空") @RequestParam("parentId") Long parentId){
+        List<SysMenu> sysMenuList = sysMenuService.loadMenusByParentId(parentId);
+        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysMenuList);
     }
 
 
