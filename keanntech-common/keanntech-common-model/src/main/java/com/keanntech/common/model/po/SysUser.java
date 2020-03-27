@@ -24,17 +24,11 @@ public class SysUser extends BasePO {
   private Boolean deleted;
   private String userName;
   private String password;
-  private String jobNumber;
-  private String name;
-  private String email;
-  private String phone;
-  private String mobile;
-  private String photo;
   private Boolean superAdmin;
   private Boolean admin;
   private Boolean enabled;
-  private Long sysCompanyId;
   private SysCompany sysCompany;
+  private SysEmployee employee;
   private Boolean accountNonExpired;
   private Boolean credentialsNonExpired;
   private Boolean accountNonLocked;

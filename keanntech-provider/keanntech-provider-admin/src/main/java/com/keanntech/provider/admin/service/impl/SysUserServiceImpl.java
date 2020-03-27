@@ -7,8 +7,11 @@ import com.github.pagehelper.PageInfo;
 import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.base.utils.BCryptPwEncoder;
 import com.keanntech.common.model.auth.OauthClient;
+import com.keanntech.common.model.dto.UserDTO;
+import com.keanntech.common.model.po.SysEmployee;
 import com.keanntech.common.model.po.SysRole;
 import com.keanntech.common.model.po.SysUser;
+import com.keanntech.provider.admin.mapper.SysEmployeeMapper;
 import com.keanntech.provider.admin.mapper.SysUserMapper;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
 import com.keanntech.provider.admin.service.ISysUserService;
@@ -32,6 +35,7 @@ public class SysUserServiceImpl implements ISysUserService {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private SysUserMapper sysUserMapper;
+    private SysEmployeeMapper sysEmployeeMapper;
     private CachedUidGenerator cachedUidGenerator;
     private OauthClientApi oauthClientApi;
     private ISysUserRoleRelationService sysUserRoleRelationService;
@@ -39,6 +43,11 @@ public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     public void setSysUserMapper(SysUserMapper sysUserMapper) {
         this.sysUserMapper = sysUserMapper;
+    }
+
+    @Autowired
+    public void setSysEmployeeMapper(SysEmployeeMapper sysEmployeeMapper){
+        this.sysEmployeeMapper = sysEmployeeMapper;
     }
 
     @Autowired
@@ -82,19 +91,29 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     @Transactional(rollbackFor = ActionException.class)
-    public boolean createUser(SysUser sysUser) {
+    public boolean createUser(UserDTO userDTO) {
 
         BCryptPwEncoder bCryptPwEncoder = new BCryptPwEncoder();
 
         try {
+            SysUser sysUser = userDTO.getSysUser();
+            SysEmployee employee = userDTO.getSysEmployee();
+
             LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             sysUser.setCreateDate(timestamp);
             sysUser.setUpdateDate(timestamp);
             sysUser.setLastLoginDate(timestamp);
             sysUser.setId(cachedUidGenerator.getUID());
-            sysUser.setPassword(bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes())));
+            sysUser.setPassword(bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(employee.getJobNumber().getBytes())));
             sysUserMapper.saveUser(sysUser);
+
+            employee.setId(cachedUidGenerator.getUID());
+            employee.setSysUserId(sysUser.getId());
+            employee.setCreateDate(timestamp);
+            employee.setUpdateDate(timestamp);
+            sysEmployeeMapper.insert(employee);
+
 
             //获取角色
             List<SysRole> sysRoles = sysUser.getUserRoles();
@@ -110,7 +129,7 @@ public class SysUserServiceImpl implements ISysUserService {
 
 
         } catch (ActionException e) {
-            throw new ActionException();
+            throw new ActionException("创建用户失败：" + e.getMessage());
         }
 
         return true;
@@ -118,12 +137,19 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     @Transactional(rollbackFor = ActionException.class)
-    public boolean updateUser(SysUser sysUser) {
+    public boolean updateUser(UserDTO userDTO) {
         try {
+            SysUser sysUser = userDTO.getSysUser();
+            SysEmployee sysEmployee = userDTO.getSysEmployee();
+
             LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             sysUser.setUpdateDate(timestamp);
             sysUserMapper.updateUser(sysUser);
+
+            sysEmployee.setUpdateDate(timestamp);
+            sysEmployeeMapper.update(sysEmployee);
+
             List<SysRole> sysRoles = sysUser.getUserRoles();
             if(!CollectionUtils.isEmpty(sysRoles) && sysRoles.size() > 0) {
                 this.sysUserRoleRelationService.deleteByUserId(sysUser.getId());
@@ -131,7 +157,7 @@ public class SysUserServiceImpl implements ISysUserService {
                 sysUserRoleRelationService.batchInsert(sysUser.getId(), roleIds);
             }
         } catch (ActionException e) {
-            throw new ActionException();
+            throw new ActionException("更新用户失败：" + e.getMessage());
         }
         return true;
     }
@@ -142,7 +168,7 @@ public class SysUserServiceImpl implements ISysUserService {
         try {
             return sysUserMapper.updateEnabled(enabled, userName) > 0;
         } catch (Exception e) {
-            throw new ActionException();
+            throw new ActionException("禁用用户失败：" + e.getMessage());
         }
     }
 
@@ -152,12 +178,12 @@ public class SysUserServiceImpl implements ISysUserService {
         try {
             BCryptPwEncoder bCryptPwEncoder = new BCryptPwEncoder();
             SysUser sysUser = this.loadUserByUserName(userName);
-            String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()));
-            sysUserMapper.resetPassword(pw, userName);
-            oauthClientApi.resetClientSecret(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()), userName);
+//            String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()));
+//            sysUserMapper.resetPassword(pw, userName);
+//            oauthClientApi.resetClientSecret(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()), userName);
             return true;
         } catch (Exception e) {
-            throw new ActionException();
+            throw new ActionException("重置密码失败：" + e.getMessage());
         }
     }
 }

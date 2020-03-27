@@ -13,19 +13,16 @@ import java.util.List;
 public interface SysCompanyMapper {
 
     /**
-     * 通过ID查询单条数据
-     *
-     * @param id 主键
-     * @return 实例对象
-     */
-    SysCompany queryById(Long id);
-
-    /**
      * 查询所有未删除的数据
      * @return
      */
     List<SysCompany> loadAllCompanies();
 
+    /**
+     * 保存公司信息
+     * @param sysCompany
+     * @return
+     */
     int saveCompany(SysCompany sysCompany);
 
     /**
@@ -36,12 +33,6 @@ public interface SysCompanyMapper {
      */
     int update(SysCompany sysCompany);
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 影响行数
-     */
-    int deleteById(Long id);
+    SysCompany selectOneByUserId(Long userId);
 
 }

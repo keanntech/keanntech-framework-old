@@ -1,14 +1,11 @@
 package com.keanntech.authorization.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keanntech.authorization.service.IClientDetailsService;
 import com.keanntech.authorization.token.AuthJwtTokenEnhancer;
 import com.keanntech.common.base.constants.GlobalsConstants;
-import com.keanntech.common.base.reponse.ResponseData;
-import com.keanntech.common.base.reponse.ResponseDataUtil;
-import com.keanntech.common.base.reponse.ResultEnums;
+import com.keanntech.common.base.reponse.Result;
 import com.keanntech.common.base.utils.RedisUtil;
 import com.keanntech.common.model.po.SysUser;
 import org.apache.commons.lang3.StringUtils;
@@ -65,15 +62,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET);
-        ResponseData resData = null;
+        Result resData = null;
         SysUser curtUser = (SysUser)authentication.getPrincipal();
         String clientId = curtUser.getUserName();
         String clientSecret = curtUser.getPassword();
         ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
         if(clientDetails == null){
-            resData = ResponseDataUtil.buildError(ResultEnums.ERROR.getCode(),clientId + "不存在！", clientDetails);
+            resData = Result.error().message(clientId + "不存在！");
         }else if(!StringUtils.contains(clientDetails.getClientSecret(),clientSecret)){
-            resData = ResponseDataUtil.buildError(ResultEnums.ERROR.getCode(),"密码不匹配！", clientDetails);
+            resData = Result.error().message("密码不匹配");
         }else{
             TokenRequest tokenRequest = new TokenRequest(new HashMap<>(),clientId, clientDetails.getScope(),"authorization_code");
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
@@ -87,7 +84,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             oAuth2AccessTokenJackson2Serializer.serialize(token, jg, null);
             redisUtil.set(GlobalsConstants.CACHE_NAME_TOKEN_SERIALIZER + "::" + clientDetails.getClientId(), bos.toString());
 
-            resData = ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"登录成功！",JSON.toJSONString(token));
+            resData = Result.ok().data("data", token).message("登录成功");
         }
 
         ObjectMapper om = new ObjectMapper();

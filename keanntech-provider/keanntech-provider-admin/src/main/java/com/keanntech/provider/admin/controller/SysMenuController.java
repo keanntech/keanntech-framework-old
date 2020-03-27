@@ -1,9 +1,8 @@
 package com.keanntech.provider.admin.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.keanntech.common.base.reponse.ResponseData;
-import com.keanntech.common.base.reponse.ResponseDataUtil;
-import com.keanntech.common.base.reponse.ResultEnums;
+import com.keanntech.common.base.exception.ActionException;
+import com.keanntech.common.base.reponse.Result;
 import com.keanntech.common.model.po.SysMenu;
 import com.keanntech.provider.admin.service.ISysMenuService;
 import com.keanntech.provider.admin.service.ISysUserService;
@@ -43,7 +42,7 @@ public class SysMenuController {
     @ApiOperation(value = "根据角色获取菜单")
     @ApiImplicitParam(name = "roleIds", value = "角色ID", required = true, dataType = "List")
     @PostMapping("/loadMenus")
-    public ResponseData<SysMenu> loadMenusByRole(@RequestBody List<Long> roleIds, @RequestParam("isAdmin") Boolean isAdmin){
+    public Result<SysMenu> loadMenusByRole(@RequestBody List<Long> roleIds, @RequestParam("isAdmin") Boolean isAdmin){
         List<SysMenu> sysMenus;
         if(isAdmin){
             sysMenus = sysMenuService.loadAllSysMenus();
@@ -52,18 +51,16 @@ public class SysMenuController {
         }
 
         if(Objects.isNull(sysMenus)){
-            return ResponseDataUtil.buildError(ResultEnums.MENU_EMPTY.getCode(),"未分配角色，无法获取菜单");
+            throw new ActionException("未分配角色，无法获取菜单");
         }
         JSONArray jsonMenus = sysMenuService.createMenuTree(sysMenus);
-        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", jsonMenus);
+        return Result.ok().data("data",jsonMenus).message("");
     }
 
     @GetMapping("/loadMenuByParentId")
-    public ResponseData<SysMenu> loadMenuByParentId(@NotNull(message = "父ID不能为空") @RequestParam("parentId") Long parentId){
+    public Result<SysMenu> loadMenuByParentId(@NotNull(message = "父ID不能为空") @RequestParam("parentId") Long parentId){
         List<SysMenu> sysMenuList = sysMenuService.loadMenusByParentId(parentId);
-        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysMenuList);
+        return Result.ok().data("data", sysMenuList).message("");
     }
-
-
 
 }

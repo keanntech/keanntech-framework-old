@@ -1,15 +1,20 @@
 package com.keanntech.common.base.exception;
 
-import com.keanntech.common.base.reponse.ResultEnums;
-
 public class ActionException extends BaseException {
 
-    public ActionException(){
-        super(ResultEnums.ERROR);
-    }
+    private Integer code;
+    private String message;
 
     public ActionException(String message){
-        super(ResultEnums.ERROR, message);
+        super(-1, message);
+        this.code = -1;
+        this.message = message;
+    }
+
+    public ActionException(Integer code, String message){
+        super(code, message);
+        this.code = code;
+        this.message = message;
     }
 
 }

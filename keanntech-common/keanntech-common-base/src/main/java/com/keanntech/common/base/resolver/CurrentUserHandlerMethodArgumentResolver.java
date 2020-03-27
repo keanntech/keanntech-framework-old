@@ -1,5 +1,6 @@
 package com.keanntech.common.base.resolver;
 
+import com.keanntech.common.base.annotation.CurrentUser;
 import com.keanntech.common.base.constants.SecurityConstants;
 import com.keanntech.common.base.oauth.JWTHelper;
 import com.keanntech.common.base.utils.OauthUtil;
@@ -19,11 +20,11 @@ public class CurrentUserHandlerMethodArgumentResolver implements HandlerMethodAr
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return true;
+        return methodParameter.hasParameterAnnotation(CurrentUser.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
         String token = nativeWebRequest.getHeader(SecurityConstants.AUTH_HEADER);
         String publicKey = OauthUtil.getPubKey();
         if(StringUtils.isEmpty(token) || StringUtils.isEmpty(publicKey)){
@@ -38,11 +39,8 @@ public class CurrentUserHandlerMethodArgumentResolver implements HandlerMethodAr
         }
         CurrentUserResolver currentUser = new CurrentUserResolver();
         currentUser.setId(Long.valueOf(String.valueOf(claims.get("id"))));
-        currentUser.setJobNumber(String.valueOf(claims.get("jobNumber")));
         currentUser.setName(String.valueOf(claims.get("name")));
-        currentUser.setRoleIds((List)claims.get("roleIds"));
         currentUser.setUserName(String.valueOf(claims.get("userName")));
-        currentUser.setSysCompanyId(Long.valueOf(String.valueOf(claims.get("sysCompanyId"))));
         return currentUser;
     }
 }

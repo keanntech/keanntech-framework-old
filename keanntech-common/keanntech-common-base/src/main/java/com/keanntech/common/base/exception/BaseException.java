@@ -1,25 +1,20 @@
 package com.keanntech.common.base.exception;
 
-import lombok.Getter;
+import com.keanntech.common.base.reponse.ResultCodeEnum;
+import lombok.Data;
 
-@Getter
+
+@Data
 public class BaseException extends RuntimeException {
-    /**
-     * 异常对应的错误类型
-     */
-    private final ErrorType errorType;
+    private Integer code;
 
-    public BaseException(ErrorType errorType) {
-        this.errorType = errorType;
-    }
-
-    public BaseException(ErrorType errorType, String message) {
+    public BaseException(Integer code, String message) {
         super(message);
-        this.errorType = new LogicErrorType(errorType.getCode(),message);
+        this.code = code;
     }
 
-    public BaseException(ErrorType errorType, String message, Throwable cause) {
-        super(message, cause);
-        this.errorType = new LogicErrorType(errorType.getCode(),message);
+    public BaseException(ResultCodeEnum resultCodeEnum) {
+        super(resultCodeEnum.getMessage());
+        this.code = resultCodeEnum.getCode();
     }
 }

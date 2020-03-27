@@ -5,6 +5,10 @@
 <mapper namespace="com.keanntech.authorization.mapper.SysUserMapper">
     <resultMap id="SysUserResultMap" type="com.keanntech.common.model.po.SysUser">
         <id column="id" property="id"></id>
+        <result column="user_name" property="userName"></result>
+        <result column="password" property="password"></result>
+        <result column="super_admin" property="superAdmin"></result>
+        <result column="admin" property="admin"></result>
         <result column="create_id" property="createId"></result>
         <result column="update_id" property="updateId"></result>
         <result column="create_date" property="createDate"></result>
@@ -12,29 +16,24 @@
         <result column="last_login_date" property="lastLoginDate"></result>
         <result column="remark" property="remark"></result>
         <result column="deleted" property="deleted"></result>
-        <result column="user_name" property="userName"></result>
-        <result column="password" property="password"></result>
-        <result column="job_number" property="jobNumber"></result>
-        <result column="name" property="name"></result>
-        <result column="email" property="email"></result>
-        <result column="phone" property="phone"></result>
-        <result column="mobile" property="mobile"></result>
-        <result column="photo" property="photo"></result>
-        <result column="super_admin" property="superAdmin"></result>
         <result column="enabled" property="enabled"></result>
-        <result column="sys_company_id" property="sysCompanyId"></result>
         <result column="account_non_expired" property="accountNonExpired"></result>
         <result column="credentials_non_expired" property="credentialsNonExpired"></result>
         <result column="account_non_locked" property="accountNonLocked"></result>
+        <association property="employee" column="id" javaType="com.keanntech.common.model.po.SysEmployee" select="getEmployee" />
+        <collection property="userRoles" column="id" ofType="com.keanntech.common.model.po.SysRole" select="getRolesById"/>
     </resultMap>
-    <resultMap id="lazyLoadRoles" type="com.keanntech.common.model.po.SysUser" extends="SysUserResultMap">
-        <collection property="userRoles" ofType="com.keanntech.common.model.po.SysRole" select="com.keanntech.authorization.mapper.SysUserMapper.getRolesById" column="id"></collection>
-    </resultMap>
+
     <select id="getRolesById" resultType="com.keanntech.common.model.po.SysRole">
         SELECT role.* FROM sys_role role, sys_user_role_relation relation, sys_user user
         where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{id}
     </select>
-    <select id="loadUser" resultMap="lazyLoadRoles">
+
+    <select id="getEmployee" resultType="com.keanntech.common.model.po.SysEmployee">
+        SELECT employee.* FROM sys_employee employee WHERE employee.sys_user_id = #{id}
+    </select>
+
+    <select id="loadUser" resultMap="SysUserResultMap">
         SELECT * FROM sys_user WHERE user_name = #{userName}
     </select>
 </mapper>

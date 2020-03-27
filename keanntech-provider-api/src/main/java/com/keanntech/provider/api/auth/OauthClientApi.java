@@ -1,6 +1,5 @@
 package com.keanntech.provider.api.auth;
 
-import com.keanntech.common.base.reponse.ResponseData;
 import com.keanntech.common.model.auth.OauthClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

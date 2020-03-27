@@ -42,17 +42,6 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
     }
 
     /**
-     * 通过ID查询单条数据
-     *
-     * @param id 主键
-     * @return 实例对象
-     */
-    @Override
-    public SysCompany queryById(Long id) {
-        return this.sysCompanyMapper.queryById(id);
-    }
-
-    /**
      * 加载所有公司
      * @return
      */
@@ -77,7 +66,7 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
             sysCompany.setId(cachedUidGenerator.getUID());
             return sysCompanyMapper.saveCompany(sysCompany);
         }catch (ActionException e){
-            throw new ActionException();
+            throw new ActionException("保存公司信息失败：" + e.getMessage());
         }
     }
 
@@ -95,20 +84,9 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             sysCompany.setUpdateDate(timestamp);
             this.sysCompanyMapper.update(sysCompany);
-            return this.queryById(sysCompany.getId());
+            return sysCompany;
         } catch (Exception e) {
-            throw new ActionException();
+            throw new ActionException("更新公司信息失败：" + e.getMessage());
         }
-    }
-
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    @Override
-    public boolean deleteById(Long id) {
-        return this.sysCompanyMapper.deleteById(id) > 0;
     }
 }

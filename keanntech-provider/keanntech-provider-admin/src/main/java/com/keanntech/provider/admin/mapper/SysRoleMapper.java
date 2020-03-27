@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface SysRoleMapper {
 
+    List<SysRole> loadSysRoleByUserId(Long userId);
+
     /**
      * 通过ID查询单条数据
      *

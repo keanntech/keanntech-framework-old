@@ -19,7 +19,7 @@ import java.util.List;
 public class HttpMessageConvertersConfig extends MappingJackson2HttpMessageConverter {
 
     public HttpMessageConvertersConfig(){
-        List<MediaType> mediaTypes = new ArrayList<>();
+        List<MediaType> mediaTypes = new ArrayList<>(2);
         mediaTypes.add(MediaType.parseMediaType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"));
         mediaTypes.add(MediaType.parseMediaType(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"));
         setSupportedMediaTypes(mediaTypes);
@@ -28,7 +28,7 @@ public class HttpMessageConvertersConfig extends MappingJackson2HttpMessageConve
     @Bean
     public HttpMessageConverters customConverters() {
 
-        Collection<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        Collection<HttpMessageConverter<?>> messageConverters = new ArrayList<>(1);
 
         GsonHttpMessageConverter gsonHttpMessageConverter = new GsonHttpMessageConverter();
         messageConverters.add(gsonHttpMessageConverter);

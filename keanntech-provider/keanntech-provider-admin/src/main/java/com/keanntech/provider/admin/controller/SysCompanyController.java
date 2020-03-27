@@ -2,9 +2,7 @@ package com.keanntech.provider.admin.controller;
 
 import com.keanntech.common.base.annotation.CurrentUser;
 import com.keanntech.common.base.exception.ActionException;
-import com.keanntech.common.base.reponse.ResponseData;
-import com.keanntech.common.base.reponse.ResponseDataUtil;
-import com.keanntech.common.base.reponse.ResultEnums;
+import com.keanntech.common.base.reponse.Result;
 import com.keanntech.common.model.methodresolver.CurrentUserResolver;
 import com.keanntech.common.model.po.SysCompany;
 import com.keanntech.provider.admin.service.ISysCompanyService;
@@ -36,27 +34,14 @@ public class SysCompanyController {
     }
 
     /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @GetMapping("/selectOne")
-    @ApiImplicitParam(name = "id", value = "公司ID", required = true, paramType = "path", dataType = "Long")
-    public ResponseData<SysCompany> selectOne(Long id) {
-        SysCompany sysCompany = this.sysCompanyService.queryById(id);
-        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", sysCompany);
-    }
-
-    /**
      * 加载所有公司信息
      * @return
      */
     @GetMapping("/loadAllCompanies")
     @ApiOperation(value = "加载所有公司")
-    public ResponseData<SysCompany> loadAllCompanies(){
+    public Result<SysCompany> loadAllCompanies(){
         List<SysCompany> companyList = sysCompanyService.loadAllCompanies();
-        return ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(), "", companyList);
+        return Result.ok().data("data", companyList).message("");
     }
 
     /**
@@ -67,7 +52,7 @@ public class SysCompanyController {
      */
     @PostMapping("/saveCompany")
     @ApiImplicitParam(name = "sysCompany", value = "公司信息对象", required = true, paramType = "body", dataType = "SysCompany")
-    public ResponseData<SysCompany> saveCompany(
+    public Result<SysCompany> saveCompany(
             @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser){
 
         sysCompany.setCreateId(currentUser.getId());
@@ -75,22 +60,22 @@ public class SysCompanyController {
 
         try {
             sysCompanyService.saveCompany(sysCompany);
-            return ResponseDataUtil.buildSuccess(sysCompany);
+            return Result.ok().data("data",sysCompany).message("");
         } catch (ActionException e) {
-            return ResponseDataUtil.buildError("保存失败！");
+            throw new ActionException("保存失败");
         }
     }
 
     @PostMapping("/updateCompany")
-    public ResponseData<SysCompany> updateCompany(
+    public Result<SysCompany> updateCompany(
             @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser){
 
         sysCompany.setUpdateId(currentUser.getId());
         try {
             sysCompanyService.update(sysCompany);
-            return ResponseDataUtil.buildSuccess(sysCompany);
+            return Result.ok().message("").data("data", sysCompany);
         } catch (ActionException e) {
-            return ResponseDataUtil.buildError("更新失败！");
+            throw new ActionException("更新失败");
         }
 
     }

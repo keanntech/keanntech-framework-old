@@ -12,14 +12,6 @@ import java.util.List;
  */
 public interface ISysCompanyService {
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param id 主键
-     * @return 实例对象
-     */
-    SysCompany queryById(Long id);
-
     List<SysCompany> loadAllCompanies();
 
     int saveCompany(SysCompany sysCompany);
@@ -31,13 +23,5 @@ public interface ISysCompanyService {
      * @return 实例对象
      */
     SysCompany update(SysCompany sysCompany);
-
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    boolean deleteById(Long id);
 
 }

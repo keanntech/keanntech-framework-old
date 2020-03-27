@@ -14,33 +14,27 @@
         <result column="deleted" property="deleted"></result>
         <result column="user_name" property="userName"></result>
         <result column="password" property="password"></result>
-        <result column="job_number" property="jobNumber"></result>
-        <result column="name" property="name"></result>
-        <result column="email" property="email"></result>
-        <result column="phone" property="phone"></result>
-        <result column="mobile" property="mobile"></result>
-        <result column="photo" property="photo"></result>
         <result column="super_admin" property="superAdmin"></result>
         <result column="enabled" property="enabled"></result>
-        <result column="sys_company_id" property="sysCompanyId"></result>
         <result column="account_non_expired" property="accountNonExpired"></result>
         <result column="credentials_non_expired" property="credentialsNonExpired"></result>
         <result column="account_non_locked" property="accountNonLocked"></result>
         <association
                 property="sysCompany" javaType="com.keanntech.common.model.po.SysCompany"
-                column="sys_company_id" select="com.keanntech.provider.admin.mapper.SysCompanyMapper.queryById" />
+                column="{userId=id}" select="com.keanntech.provider.admin.mapper.SysCompanyMapper.selectOneByUserId" />
+        <association
+                property="employee"
+                column="{userId=id}" javaType="com.keanntech.common.model.po.SysEmployee"
+                select="com.keanntech.provider.admin.mapper.SysEmployeeMapper.selectOneByUserId" />
+        <collection property="userRoles" column="{userId=id}" ofType="com.keanntech.common.model.po.SysRole" select="com.keanntech.provider.admin.mapper.SysRoleMapper.loadSysRoleByUserId" />
     </resultMap>
 
-    <resultMap id="lazyLoadRoles" type="com.keanntech.common.model.po.SysUser" extends="SysUserResultMap">
-        <collection property="userRoles" ofType="com.keanntech.common.model.po.SysRole" select="com.keanntech.provider.admin.mapper.SysUserMapper.getRolesById" column="id"></collection>
-    </resultMap>
-
-    <select id="loadUserByUserName" resultMap="lazyLoadRoles">
-        SELECT * from sys_user WHERE user_name = #{userName} AND deleted = 0
+    <select id="loadUserByUserName" resultMap="SysUserResultMap">
+        SELECT u.id, u.super_admin, u.admin, u.last_login_date, u.user_name, u.enabled from sys_user u WHERE user_name = #{userName} AND deleted = 0
     </select>
 
-    <select id="loadUserByJobNumber" resultMap="lazyLoadRoles">
-        SELECT * from sys_user WHERE job_number = #{jobNumber} AND deleted = 0
+    <select id="loadUserByJobNumber" resultMap="SysUserResultMap">
+        SELECT u.id, u.super_admin, u.admin, u.last_login_date, u.user_name, u.enabled from sys_user u WHERE job_number = #{jobNumber} AND deleted = 0
     </select>
 
     <select id="loadAllUsers" resultMap="SysUserResultMap" resultType="java.util.List">
@@ -49,28 +43,17 @@
         <if test="sysUser.userName != null and sysUser.userName != ''">
             AND user_name LIKE concat(concat('%',#{sysUser.userName}),'%')
         </if>
-        <if test="sysUser.name != null and sysUser.name != ''">
-            AND name LIKE concat(concat('%',#{sysUser.name}),'%')
-        </if>
-        <if test="sysUser.jobNumber != null and sysUser.jobNumber != ''">
-            AND job_number = #{sysUser.jobNumber,jdbcType=VARCHAR}
-        </if>
     </select>
 
     <select id="loadAdmin" resultMap="SysUserResultMap" resultType="java.util.List">
-        SELECT u.id, u.job_number, u.last_login_date, u.user_name, u.name, u.email, u.mobile, u.enabled, u.sys_company_id FROM sys_user u WHERE u.deleted = 0 AND u.admin = 1
-    </select>
-
-    <select id="getRolesById" resultType="com.keanntech.common.model.po.SysRole">
-        SELECT role.* FROM sys_role role, sys_user_role_relation relation, sys_user user
-        where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{id} AND user.deleted = 0
+        SELECT u.id, u.super_admin, u.admin, u.last_login_date, u.user_name, u.enabled FROM sys_user u WHERE u.deleted = 0 AND u.admin = 1 AND u.super_admin = 0
     </select>
 
     <insert id="saveUser">
         INSERT INTO
-        sys_user (id,user_name,password,job_number,name,remark,email,phone,mobile,photo,super_admin,admin,sys_company_id,
+        sys_user (id,user_name,password,remark,super_admin,admin,
         last_login_date,create_id,update_id,create_date,update_date)
-        VALUE (#{id},#{userName},#{password},#{jobNumber},#{name},#{remark},#{email},#{phone},#{mobile},#{photo},#{superAdmin},#{admin},#{sysCompanyId},
+        VALUE (#{id},#{userName},#{password},#{remark},#{superAdmin},#{admin},
         #{lastLoginDate},#{createId},#{updateId},#{createDate},#{updateDate})
     </insert>
 
@@ -80,26 +63,8 @@
             <if test="userName != null and userName != ''">
                 user_name = #{userName},
             </if>
-            <if test="jobNumber != null and jobNumber != ''">
-                job_number = #{jobNumber},
-            </if>
-            <if test="name != null and name != ''">
-                name = #{name},
-            </if>
             <if test="remark != null and remark != ''">
                 remark = #{remark},
-            </if>
-            <if test="email != null and email != ''">
-                email = #{email},
-            </if>
-            <if test="phone != null and phone != ''">
-                phone = #{phone},
-            </if>
-            <if test="mobile != null and mobile != ''">
-                mobile = #{mobile},
-            </if>
-            <if test="sysCompanyId != null and sysCompanyId != ''">
-                sys_company_id = #{sysCompanyId},
             </if>
             <if test="updateId != null">
                 update_id = #{updateId},

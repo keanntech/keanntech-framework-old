@@ -2,8 +2,7 @@ package com.keanntech.authorization.handler;
 
 import cn.hutool.http.ContentType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keanntech.common.base.reponse.ResponseData;
-import com.keanntech.common.base.reponse.ResponseDataUtil;
+import com.keanntech.common.base.reponse.Result;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
         httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
         httpServletResponse.setContentType(ContentType.JSON.toString());
         PrintWriter out = httpServletResponse.getWriter();
-        ResponseData error = ResponseDataUtil.buildError("权限不足，请联系管理员!");
+        Result error = Result.error().message("权限不足，请联系管理员!");
         out.write(new ObjectMapper().writeValueAsString(error));
         out.flush();
         out.close();

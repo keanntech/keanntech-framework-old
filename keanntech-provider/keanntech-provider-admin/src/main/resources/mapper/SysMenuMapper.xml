@@ -26,7 +26,7 @@
     <select id="loadSysMenus" parameterType="java.util.List" resultMap="SysMenuMap">
         select
           menu.* from sys_menu menu, sys_role_menu_relation menurela
-        where menu.show = 1 and menu.id = menurela.sys_menu_id and menurela.sys_role_id in
+        where menu.show = 1 and menu.id = menurela.sys_menu_id and deleted = 0 and menurela.sys_role_id in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -34,12 +34,12 @@
     </select>
 
     <select id="loadAllSysMenus" resultMap="SysMenuMap">
-        SELECT * FROM sys_menu
+        SELECT * FROM sys_menu where deleted = 0
     </select>
 
     <!--根据父ID查询-->
     <select id="loadMenusByParentId" resultMap="SysMenuMap">
-        SELECT * FROM sys_menu WHERE parent_id = #{parentId} ORDER BY sort ASC
+        SELECT * FROM sys_menu WHERE parent_id = #{parentId} and deleted = 0 ORDER BY sort ASC
     </select>
 
     <!--查询单个-->
@@ -47,7 +47,7 @@
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, parent_id, menu_name, type, href, target, icon, show, permission, path, sort, sys_company_id
         from keanntech_admin.sys_menu
-        where id = #{id}
+        where id = #{id} and deleted = 0
     </select>
 
     <!--新增所有列-->

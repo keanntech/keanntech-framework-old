@@ -22,14 +22,6 @@
         <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <!--查询单个-->
-    <select id="queryById" resultMap="SysCompanyMap">
-        select
-          id, create_id, update_id, create_date, update_date, remark, deleted, address, area_id, zip_code, master, phone, mobile, fax, email, copyright, company_name
-        from keanntech_admin.sys_company
-        where id = #{id}
-    </select>
-
 
     <select id="loadAllCompanies" resultMap="SysCompanyMap">
         select
@@ -103,9 +95,22 @@
         where id = #{id}
     </update>
 
-    <!--通过主键删除-->
-    <delete id="deleteById">
-        delete from keanntech_admin.sys_company where id = #{id}
-    </delete>
+    <!--根据userId查询公司信息-->
+    <select id="selectOneByUserId" resultMap="SysCompanyMap">
+        SELECT
+        company.company_name,
+        company.id,
+        company.remark,
+        company.address,
+        company.zip_code,
+        company.master,
+        company.phone,
+        company.mobile,
+        company.email,
+        company.fax
+        FROM sys_company company, sys_user user, sys_employee employee
+        WHERE user.id = #{userId} AND employee.sys_user_id = #{userId} AND user.id = employee.sys_user_id
+        AND employee.sys_company_id = company.id AND user.deleted = 0 AND employee.deleted = 0
+    </select>
 
 </mapper>

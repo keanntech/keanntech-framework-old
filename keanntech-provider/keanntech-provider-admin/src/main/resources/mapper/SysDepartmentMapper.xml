@@ -24,7 +24,7 @@
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, parent_id, dept_name, code, icon, path, sort, sys_company_id
         from keanntech_admin.sys_department
-        where id = #{id}
+        where id = #{id} AND deleted = 0
     </select>
 
     <!--查询指定行数据-->
@@ -32,14 +32,14 @@
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, parent_id, dept_name, code, icon, path, sort, sys_company_id
         from keanntech_admin.sys_department
-        limit #{offset}, #{limit}
+        limit #{offset}, #{limit} AND deleted = 0
     </select>
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SysDepartmentMap">
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, parent_id, dept_name, code, icon, path, sort, sys_company_id
-        from keanntech_admin.sys_department
+        from keanntech_admin.sys_department where deleted = 0
         <where>
             <if test="id != null">
                 and id = #{id}

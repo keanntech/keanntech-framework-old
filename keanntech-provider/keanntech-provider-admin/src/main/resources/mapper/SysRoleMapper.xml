@@ -17,19 +17,25 @@
         <result property="dataScope" column="data_scope" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!--根据用户ID查询-->
+    <select id="loadSysRoleByUserId" resultMap="SysRoleMap">
+        SELECT role.* FROM sys_role role, sys_user_role_relation relation, sys_user user
+        where user.id = relation.sys_user_id AND role.id = relation.sys_role_id AND user.id = #{userId} AND user.deleted = 0
+    </select>
+
     <!--查询单个-->
     <select id="queryById" resultMap="SysRoleMap">
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope
         from keanntech_admin.sys_role
-        where id = #{id}
+        where id = #{id} and deleted = 0
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SysRoleMap">
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope
-        from keanntech_admin.sys_role
+        from keanntech_admin.sys_role where deleted = 0
         limit #{offset}, #{limit}
     </select>
 
@@ -37,7 +43,7 @@
     <select id="queryAll" resultMap="SysRoleMap">
         select
           id, create_id, update_id, create_date, update_date, remark, deleted, role_name, code, enabled, sys_company_id, data_scope
-        from keanntech_admin.sys_role
+        from keanntech_admin.sys_role where deleted = 0
         <where>
             <if test="id != null">
                 and id = #{id}

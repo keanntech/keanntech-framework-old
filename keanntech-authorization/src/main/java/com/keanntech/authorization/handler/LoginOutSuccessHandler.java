@@ -2,9 +2,7 @@ package com.keanntech.authorization.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keanntech.common.base.constants.GlobalsConstants;
-import com.keanntech.common.base.reponse.ResponseData;
-import com.keanntech.common.base.reponse.ResponseDataUtil;
-import com.keanntech.common.base.reponse.ResultEnums;
+import com.keanntech.common.base.reponse.Result;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -26,7 +24,7 @@ public class LoginOutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE + GlobalsConstants.CHARSET);
-        ResponseData resData = ResponseDataUtil.buildSuccess(ResultEnums.SUCCESS.getCode(),"成功退出！", null);
+        Result resData = Result.ok().message("成功退出").data("data", null);
         ObjectMapper om = new ObjectMapper();
         PrintWriter out = httpServletResponse.getWriter();
         out.write(om.writeValueAsString(resData));
