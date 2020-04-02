@@ -18,8 +18,6 @@ public interface SysUserMapper {
 
     List<SysUser> loadAdmin();
 
-    List<SysRole> getRolesById(Long userId);
-
     int saveUser(SysUser sysUser);
 
     int updateUser(SysUser sysUser);

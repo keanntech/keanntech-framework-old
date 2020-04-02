@@ -1,13 +1,22 @@
 package com.keanntech.provider.admin.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.fsg.uid.impl.CachedUidGenerator;
+import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.model.po.SysMenu;
 import com.keanntech.provider.admin.mapper.SysMenuMapper;
 import com.keanntech.provider.admin.service.ISysMenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,13 +28,21 @@ import java.util.stream.Collectors;
  * @since 2020-02-13 20:03:02
  */
 @Service("sysMenuService")
+@Slf4j
 public class SysMenuServiceImpl implements ISysMenuService {
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private SysMenuMapper sysMenuMapper;
+    private CachedUidGenerator cachedUidGenerator;
 
     @Autowired
     public void setSysMenuMapper(SysMenuMapper sysMenuMapper) {
         this.sysMenuMapper = sysMenuMapper;
+    }
+
+    @Autowired
+    public void setCachedUidGenerator(CachedUidGenerator cachedUidGenerator){
+        this.cachedUidGenerator = cachedUidGenerator;
     }
 
     /**
@@ -89,8 +106,19 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * @return 实例对象
      */
     @Override
+    @Transactional(rollbackFor = ActionException.class)
     public SysMenu insert(SysMenu sysMenu) {
-        this.sysMenuMapper.insert(sysMenu);
+        try {
+            LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            sysMenu.setId(cachedUidGenerator.getUID());
+            sysMenu.setUpdateDate(timestamp);
+            sysMenu.setCreateDate(timestamp);
+            this.sysMenuMapper.insert(sysMenu);
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
         return sysMenu;
     }
 
@@ -101,9 +129,18 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * @return 实例对象
      */
     @Override
+    @Transactional(rollbackFor = ActionException.class)
     public SysMenu update(SysMenu sysMenu) {
-        this.sysMenuMapper.update(sysMenu);
-        return this.queryById(sysMenu.getId());
+        try {
+            LocalDateTime localDateTime = LocalDateTime.parse(DateUtil.now(),formatter);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            sysMenu.setUpdateDate(timestamp);
+            this.sysMenuMapper.update(sysMenu);
+            return this.queryById(sysMenu.getId());
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
     /**
@@ -149,6 +186,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     private JSONObject setMenuItem(SysMenu sysMenu){
         JSONObject menuItem = new JSONObject();
+        menuItem.put("id", sysMenu.getId());
         menuItem.put("path", sysMenu.getPath());
         menuItem.put("component", sysMenu.getComponent());
         menuItem.put("redirect", sysMenu.getRedirect());

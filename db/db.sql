@@ -4390,7 +4390,7 @@ CREATE TABLE `sys_menu` (
   `menu_title` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '菜单标题',
   `redirect` varchar(1000) COLLATE utf8_bin DEFAULT NULL COMMENT '链接地址',
   `icon` varchar(1000) COLLATE utf8_bin DEFAULT NULL COMMENT '图标',
-  `show` bit(1) COLLATE utf8_bin DEFAULT 1 COMMENT '是否展示，0：不展示，1：展示',
+  `showed` bit(1) COLLATE utf8_bin DEFAULT 1 COMMENT '是否展示，0：不展示，1：展示',
   `component` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '组件',
   `path` varchar(1000) COLLATE utf8_bin DEFAULT NULL COMMENT '路径',
   `sort` int(11) DEFAULT NULL COMMENT '排序',

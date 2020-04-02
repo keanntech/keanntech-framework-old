@@ -6,8 +6,10 @@ import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.model.po.SysCompany;
 import com.keanntech.provider.admin.mapper.SysCompanyMapper;
 import com.keanntech.provider.admin.service.ISysCompanyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import java.util.List;
  * @since 2020-03-09 21:39:53
  */
 @Service("sysCompanyService")
+@Slf4j
 public class SysCompanyServiceImpl implements ISysCompanyService {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -65,8 +68,9 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
             sysCompany.setUpdateDate(timestamp);
             sysCompany.setId(cachedUidGenerator.getUID());
             return sysCompanyMapper.saveCompany(sysCompany);
-        }catch (ActionException e){
-            throw new ActionException("保存公司信息失败：" + e.getMessage());
+        }catch (DataAccessException e){
+            log.error(e.getMessage());
+            throw e;
         }
     }
 
@@ -85,8 +89,9 @@ public class SysCompanyServiceImpl implements ISysCompanyService {
             sysCompany.setUpdateDate(timestamp);
             this.sysCompanyMapper.update(sysCompany);
             return sysCompany;
-        } catch (Exception e) {
-            throw new ActionException("更新公司信息失败：" + e.getMessage());
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
         }
     }
 }

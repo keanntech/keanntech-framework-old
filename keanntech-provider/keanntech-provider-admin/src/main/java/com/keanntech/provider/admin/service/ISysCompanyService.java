@@ -1,5 +1,6 @@
 package com.keanntech.provider.admin.service;
 
+import com.keanntech.common.base.exception.ActionException;
 import com.keanntech.common.model.po.SysCompany;
 
 import java.util.List;

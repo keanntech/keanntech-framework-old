@@ -56,13 +56,13 @@ public class SysUserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataType = "string")
     })
-    public Result<SysUser> loadUser(@NotNull(message = "用户名不能为空！") @RequestParam("userName") String userName){
+    public Result<SysUser> loadUser(@NotNull(message = "用户名不能为空！") @RequestParam("userName") String userName) {
         SysUser sysUser = sysUserService.loadUserByUserName(userName);
         if(Objects.isNull(sysUser)){
             throw new ActionException("用户" + userName + "不存在！");
         }
         sysUser.setPassword("");
-        return Result.ok().data("data", sysUser).message("");
+        return Result.ok().data("data", sysUser);
     }
 
     @PostMapping("/loadAllUsers")
@@ -73,7 +73,7 @@ public class SysUserController extends BaseController {
     })
     public Result<SysUser> loadAllUsers(@RequestBody SysUser sysUser, @RequestParam("curtPage") int curtPage, @RequestParam("pageSize") int pageSize, @CurrentUser CurrentUserResolver currentUserResolver){
         PageInfo<SysUser> sysUserList = sysUserService.loadAllUsers(sysUser, curtPage, pageSize, currentUserResolver.getSysCompanyId());
-        return Result.ok().data("data", sysUserList).message("");
+        return Result.ok().data("data", sysUserList);
     }
 
     @GetMapping("/loadAdmin")
@@ -109,9 +109,9 @@ public class SysUserController extends BaseController {
             //保存用户信息
             sysUserService.createUser(userDTO);
 
-            return Result.ok().data("data", sysUserService.loadUserByUserName(userDTO.getSysUser().getUserName()));
-        } catch (ActionException e) {
-            throw new ActionException("添加失败！");
+            return Result.ok().message("保存成功").data("data", sysUserService.loadUserByUserName(userDTO.getSysUser().getUserName()));
+        } catch (Exception e) {
+            throw new ActionException("添加失败");
         }
 
 
@@ -124,7 +124,7 @@ public class SysUserController extends BaseController {
             @ApiImplicitParam(name = "sysUser", value = "用户信息", required = true)
     })
     public Result<SysUser> updateUser(
-            @NotNull(message = "用户信息不能为空") @RequestBody UserDTO userDTO, @CurrentUser CurrentUserResolver currentUserResolver){
+            @NotNull(message = "用户信息不能为空") @RequestBody UserDTO userDTO, @CurrentUser CurrentUserResolver currentUserResolver) {
         try {
             //验证用户名、工号是否重复
             SysUser user = sysUserService.loadUserByUserName(userDTO.getSysUser().getUserName());
@@ -140,20 +140,20 @@ public class SysUserController extends BaseController {
             userDTO.getSysEmployee().setUpdateId(currentUserResolver.getId());
             sysUserService.updateUser(userDTO);
             return Result.ok().message("修改成功").data("data", sysUserService.loadUserByUserName(userDTO.getSysUser().getUserName()));
-        } catch (ActionException e) {
-            throw new ActionException("修改失败！");
+        } catch (Exception e) {
+            throw new ActionException("修改失败");
         }
     }
 
     @GetMapping("/resetPassword")
     @ApiOperation(value = "重置密码")
     @ApiImplicitParam(name = "userName", value = "用户名", required = true, paramType = "query")
-    public Result resetPassword(@NotNull(message = "用户名不能为空") @RequestParam("userName") String userName){
+    public Result resetPassword(@NotNull(message = "用户名不能为空") @RequestParam("userName") String userName) {
         try {
             sysUserService.resetPassword(userName);
-            return Result.ok().message("更新成功！");
-        } catch (ActionException e) {
-            throw new ActionException("更新失败！");
+            return Result.ok().message("更新成功");
+        } catch (Exception e) {
+            throw new ActionException("更新失败");
         }
     }
 
@@ -166,17 +166,17 @@ public class SysUserController extends BaseController {
         if(!CollectionUtils.isEmpty(sysUserRoleRelations) && sysUserRoleRelations.size() > 0){
             roleIds = sysUserRoleRelations.stream().map(SysUserRoleRelation::getSysRoleId).collect(Collectors.toList());
         }
-        return Result.ok().data("data",roleIds).message("");
+        return Result.ok().data("data",roleIds);
     }
 
     @GetMapping("/updateEnabled")
     @ApiOperation(value = "禁用/启用 用户")
-    public Result updateEnabled(@RequestParam("enabled") int enabled, @RequestParam("userName") String userName){
+    public Result updateEnabled(@RequestParam("enabled") int enabled, @RequestParam("userName") String userName) {
         try {
             sysUserService.updateEnabled(enabled, userName);
-            return Result.ok().message("更新成功！");
-        } catch (ActionException e){
-            throw new ActionException("更新失败！");
+            return Result.ok().message("更新成功");
+        } catch (Exception e){
+            throw new ActionException("更新失败");
         }
     }
 

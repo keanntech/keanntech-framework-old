@@ -60,7 +60,7 @@ public class SysMenu extends BasePO {
     /**
      * 是否展示，0：不展示，1：展示
      */
-    private Boolean show;
+    private Boolean showed;
     /**
      * 排序
      */

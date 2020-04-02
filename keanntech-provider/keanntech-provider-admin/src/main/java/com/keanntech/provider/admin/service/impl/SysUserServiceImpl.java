@@ -16,8 +16,10 @@ import com.keanntech.provider.admin.mapper.SysUserMapper;
 import com.keanntech.provider.admin.service.ISysUserRoleRelationService;
 import com.keanntech.provider.admin.service.ISysUserService;
 import com.keanntech.provider.api.auth.OauthClientApi;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("sysUserService")
+@Slf4j
 public class SysUserServiceImpl implements ISysUserService {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -128,8 +131,9 @@ public class SysUserServiceImpl implements ISysUserService {
             oauthClientApi.createClient(oauthClient);
 
 
-        } catch (ActionException e) {
-            throw new ActionException("创建用户失败：" + e.getMessage());
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
         }
 
         return true;
@@ -156,8 +160,9 @@ public class SysUserServiceImpl implements ISysUserService {
                 List<Long> roleIds = sysRoles.stream().map(SysRole::getId).collect(Collectors.toList());
                 sysUserRoleRelationService.batchInsert(sysUser.getId(), roleIds);
             }
-        } catch (ActionException e) {
-            throw new ActionException("更新用户失败：" + e.getMessage());
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
         }
         return true;
     }
@@ -167,8 +172,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public boolean updateEnabled(int enabled, String userName) {
         try {
             return sysUserMapper.updateEnabled(enabled, userName) > 0;
-        } catch (Exception e) {
-            throw new ActionException("禁用用户失败：" + e.getMessage());
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
         }
     }
 
@@ -178,12 +184,13 @@ public class SysUserServiceImpl implements ISysUserService {
         try {
             BCryptPwEncoder bCryptPwEncoder = new BCryptPwEncoder();
             SysUser sysUser = this.loadUserByUserName(userName);
-//            String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()));
-//            sysUserMapper.resetPassword(pw, userName);
-//            oauthClientApi.resetClientSecret(DigestUtils.md5DigestAsHex(sysUser.getJobNumber().getBytes()), userName);
+            String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getEmployee().getJobNumber().getBytes()));
+            sysUserMapper.resetPassword(pw, userName);
+            oauthClientApi.resetClientSecret(DigestUtils.md5DigestAsHex(sysUser.getEmployee().getJobNumber().getBytes()), userName);
             return true;
-        } catch (Exception e) {
-            throw new ActionException("重置密码失败：" + e.getMessage());
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw e;
         }
     }
 }

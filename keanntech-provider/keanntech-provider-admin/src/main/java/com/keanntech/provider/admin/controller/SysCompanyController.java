@@ -53,7 +53,7 @@ public class SysCompanyController {
     @PostMapping("/saveCompany")
     @ApiImplicitParam(name = "sysCompany", value = "公司信息对象", required = true, paramType = "body", dataType = "SysCompany")
     public Result<SysCompany> saveCompany(
-            @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser){
+            @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser) {
 
         sysCompany.setCreateId(currentUser.getId());
         sysCompany.setUpdateId(currentUser.getId());
@@ -61,20 +61,20 @@ public class SysCompanyController {
         try {
             sysCompanyService.saveCompany(sysCompany);
             return Result.ok().data("data",sysCompany).message("");
-        } catch (ActionException e) {
+        } catch (Exception e) {
             throw new ActionException("保存失败");
         }
     }
 
     @PostMapping("/updateCompany")
     public Result<SysCompany> updateCompany(
-            @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser){
+            @NotNull(message = "公司信息不能为空！") @RequestBody SysCompany sysCompany, @CurrentUser CurrentUserResolver currentUser) {
 
         sysCompany.setUpdateId(currentUser.getId());
         try {
             sysCompanyService.update(sysCompany);
             return Result.ok().message("").data("data", sysCompany);
-        } catch (ActionException e) {
+        } catch (Exception e) {
             throw new ActionException("更新失败");
         }
 
