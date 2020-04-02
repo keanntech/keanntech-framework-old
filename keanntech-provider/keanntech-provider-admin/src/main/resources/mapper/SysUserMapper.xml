@@ -76,14 +76,8 @@
         WHERE id = #{id}
     </update>
 
-    <update id="resetPassword">
-        UPDATE sys_user
-        <set>
-            <if test="passWord != null and passWord != ''">
-                password = #{passWord}
-            </if>
-        </set>
-        WHERE user_name = #{userName}
+    <update id="resetPassword" statementType="CALLABLE">
+        {call reset_password(#{userName,mode=IN},#{passWord,mode=IN})}
     </update>
 
     <update id="updateEnabled">
@@ -94,6 +88,10 @@
             </if>
         </set>
         WHERE user_name = #{userName}
+    </update>
+
+    <update id="delUserById" statementType="CALLABLE">
+        {call del_user(#{id,mode=IN})}
     </update>
 
 

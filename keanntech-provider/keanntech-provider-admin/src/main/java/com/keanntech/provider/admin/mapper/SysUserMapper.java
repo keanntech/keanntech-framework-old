@@ -26,4 +26,6 @@ public interface SysUserMapper {
 
     int resetPassword(@Param("passWord") String passWord, @Param("userName") String userName);
 
+    int delUserById(Long id);
+
 }

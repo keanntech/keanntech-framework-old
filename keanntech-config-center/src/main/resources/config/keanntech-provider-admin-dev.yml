@@ -7,7 +7,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.12.128:3306/keanntech_admin?useUnicode=true&characterEncoding=utf8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.12.128:3306/keanntech_admin?useUnicode=true&characterEncoding=utf8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
     password: 123456
     name: keanntech

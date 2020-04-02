@@ -117,7 +117,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
             this.sysMenuMapper.insert(sysMenu);
         } catch (DataAccessException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new ActionException(e.getMessage());
         }
         return sysMenu;
     }
@@ -139,7 +139,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
             return this.queryById(sysMenu.getId());
         } catch (DataAccessException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new ActionException(e.getMessage());
         }
     }
 

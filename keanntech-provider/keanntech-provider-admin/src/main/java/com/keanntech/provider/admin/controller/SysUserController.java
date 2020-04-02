@@ -180,4 +180,15 @@ public class SysUserController extends BaseController {
         }
     }
 
+    @ApiOperation(value = "逻辑删除用户")
+    @GetMapping("/delUserById")
+    public Result delUserById(@RequestParam("id") Long id){
+        try {
+            sysUserService.delUserById(id);
+            return Result.ok().message("删除成功");
+        } catch (Exception e) {
+            throw new ActionException("删除失败");
+        }
+    }
+
 }

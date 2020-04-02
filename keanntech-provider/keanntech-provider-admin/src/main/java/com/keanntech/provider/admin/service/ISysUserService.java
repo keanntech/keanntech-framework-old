@@ -24,4 +24,6 @@ public interface ISysUserService {
 
     boolean resetPassword(String userName);
 
+    boolean delUserById(Long id);
+
 }

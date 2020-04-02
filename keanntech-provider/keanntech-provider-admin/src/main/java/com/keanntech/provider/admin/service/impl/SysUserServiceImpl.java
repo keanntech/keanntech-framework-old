@@ -133,7 +133,7 @@ public class SysUserServiceImpl implements ISysUserService {
 
         } catch (DataAccessException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new ActionException(e.getMessage());
         }
 
         return true;
@@ -162,7 +162,7 @@ public class SysUserServiceImpl implements ISysUserService {
             }
         } catch (DataAccessException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new ActionException(e.getMessage());
         }
         return true;
     }
@@ -174,9 +174,11 @@ public class SysUserServiceImpl implements ISysUserService {
             return sysUserMapper.updateEnabled(enabled, userName) > 0;
         } catch (DataAccessException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new ActionException(e.getMessage());
         }
     }
+
+
 
     @Override
     @Transactional(rollbackFor = ActionException.class)
@@ -186,11 +188,21 @@ public class SysUserServiceImpl implements ISysUserService {
             SysUser sysUser = this.loadUserByUserName(userName);
             String pw = bCryptPwEncoder.encode(DigestUtils.md5DigestAsHex(sysUser.getEmployee().getJobNumber().getBytes()));
             sysUserMapper.resetPassword(pw, userName);
-            oauthClientApi.resetClientSecret(DigestUtils.md5DigestAsHex(sysUser.getEmployee().getJobNumber().getBytes()), userName);
             return true;
         } catch (DataAccessException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new ActionException(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = ActionException.class)
+    public boolean delUserById(Long id) {
+        try {
+            return sysUserMapper.delUserById(id) > 0;
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new ActionException(e.getMessage());
         }
     }
 }
